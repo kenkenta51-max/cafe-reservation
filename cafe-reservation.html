@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>カフェ予約 | Cafe Lumiere</title>
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', sans-serif;
+      background-color: #faf7f2;
+      color: #3a2e27;
+      min-height: 100vh;
+    }
+
+    /* Header */
+    header {
+      background-color: #3a2e27;
+      color: #faf7f2;
+      text-align: center;
+      padding: 40px 20px 30px;
+    }
+
+    header .cafe-name {
+      font-size: 2rem;
+      letter-spacing: 0.2em;
+      font-weight: 300;
+      margin-bottom: 6px;
+    }
+
+    header .cafe-tagline {
+      font-size: 0.85rem;
+      letter-spacing: 0.1em;
+      color: #c8a97a;
+    }
+
+    /* Main */
+    main {
+      max-width: 640px;
+      margin: 48px auto;
+      padding: 0 20px 60px;
+    }
+
+    .section-title {
+      font-size: 1.4rem;
+      font-weight: 400;
+      text-align: center;
+      margin-bottom: 8px;
+      letter-spacing: 0.05em;
+    }
+
+    .section-sub {
+      text-align: center;
+      font-size: 0.85rem;
+      color: #7a6a5a;
+      margin-bottom: 36px;
+    }
+
+    /* Card */
+    .card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 36px 40px;
+      box-shadow: 0 4px 24px rgba(58, 46, 39, 0.08);
+    }
+
+    /* Form groups */
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .form-group {
+      margin-bottom: 24px;
+    }
+
+    .form-group:last-of-type {
+      margin-bottom: 0;
+    }
+
+    label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      color: #7a6a5a;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+    }
+
+    label .required {
+      color: #c0392b;
+      margin-left: 4px;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1.5px solid #e0d6cc;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-family: inherit;
+      color: #3a2e27;
+      background: #faf7f2;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+
+    select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%237a6a5a' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 16px center;
+      padding-right: 40px;
+      cursor: pointer;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: #c8a97a;
+      box-shadow: 0 0 0 3px rgba(200, 169, 122, 0.15);
+    }
+
+    input::placeholder, textarea::placeholder {
+      color: #b0a090;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    /* Divider */
+    .divider {
+      border: none;
+      border-top: 1px solid #ede8e2;
+      margin: 28px 0;
+    }
+
+    /* Submit button */
+    .btn-submit {
+      display: block;
+      width: 100%;
+      padding: 16px;
+      background-color: #3a2e27;
+      color: #faf7f2;
+      border: none;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-family: inherit;
+      letter-spacing: 0.1em;
+      cursor: pointer;
+      transition: background-color 0.2s, transform 0.1s;
+      margin-top: 28px;
+    }
+
+    .btn-submit:hover {
+      background-color: #5a4a3a;
+    }
+
+    .btn-submit:active {
+      transform: scale(0.99);
+    }
+
+    /* Success message */
+    .success-message {
+      display: none;
+      text-align: center;
+      padding: 40px 20px;
+    }
+
+    .success-icon {
+      width: 64px;
+      height: 64px;
+      background: #e8f5e9;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+    }
+
+    .success-icon svg {
+      width: 32px;
+      height: 32px;
+    }
+
+    .success-message h2 {
+      font-size: 1.3rem;
+      font-weight: 500;
+      margin-bottom: 10px;
+    }
+
+    .success-message p {
+      font-size: 0.9rem;
+      color: #7a6a5a;
+      line-height: 1.7;
+    }
+
+    .success-message .btn-back {
+      display: inline-block;
+      margin-top: 24px;
+      padding: 12px 28px;
+      border: 1.5px solid #3a2e27;
+      border-radius: 10px;
+      color: #3a2e27;
+      text-decoration: none;
+      font-size: 0.9rem;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      background: none;
+      font-family: inherit;
+      transition: background-color 0.2s, color 0.2s;
+    }
+
+    .success-message .btn-back:hover {
+      background-color: #3a2e27;
+      color: #faf7f2;
+    }
+
+    /* Note */
+    .note {
+      margin-top: 20px;
+      font-size: 0.78rem;
+      color: #9a8a7a;
+      line-height: 1.7;
+      text-align: center;
+    }
+
+    /* Validation */
+    input.invalid, select.invalid, textarea.invalid {
+      border-color: #e74c3c;
+    }
+
+    .error-text {
+      font-size: 0.75rem;
+      color: #e74c3c;
+      margin-top: 5px;
+      display: none;
+    }
+
+    .error-text.visible {
+      display: block;
+    }
+
+    /* Responsive */
+    @media (max-width: 520px) {
+      .card {
+        padding: 28px 20px;
+      }
+
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="cafe-name">Cafe Lumiere</div>
+    <div class="cafe-tagline">ゆっくりとした時間をお過ごしください</div>
+  </header>
+
+  <main>
+    <h1 class="section-title">ご予約フォーム</h1>
+    <p class="section-sub">以下のフォームにご記入の上、送信してください。</p>
+
+    <div class="card">
+
+      <!-- Form -->
+      <form id="reservationForm" novalidate>
+
+        <!-- 日時 -->
+        <div class="form-row">
+          <div class="form-group">
+            <label for="date">予約日 <span class="required">*</span></label>
+            <input type="date" id="date" name="date" required>
+            <span class="error-text" id="date-error">予約日を選択してください。</span>
+          </div>
+          <div class="form-group">
+            <label for="time">時間 <span class="required">*</span></label>
+            <select id="time" name="time" required>
+              <option value="">-- 選択 --</option>
+              <option>10:00</option>
+              <option>10:30</option>
+              <option>11:00</option>
+              <option>11:30</option>
+              <option>12:00</option>
+              <option>12:30</option>
+              <option>13:00</option>
+              <option>13:30</option>
+              <option>14:00</option>
+              <option>14:30</option>
+              <option>15:00</option>
+              <option>15:30</option>
+              <option>16:00</option>
+              <option>16:30</option>
+              <option>17:00</option>
+              <option>17:30</option>
+              <option>18:00</option>
+            </select>
+            <span class="error-text" id="time-error">時間を選択してください。</span>
+          </div>
+        </div>
+
+        <!-- 人数 -->
+        <div class="form-group">
+          <label for="guests">人数 <span class="required">*</span></label>
+          <select id="guests" name="guests" required>
+            <option value="">-- 選択 --</option>
+            <option value="1">1名</option>
+            <option value="2">2名</option>
+            <option value="3">3名</option>
+            <option value="4">4名</option>
+            <option value="5">5名</option>
+            <option value="6">6名</option>
+            <option value="7">7名以上（要お問い合わせ）</option>
+          </select>
+          <span class="error-text" id="guests-error">人数を選択してください。</span>
+        </div>
+
+        <hr class="divider">
+
+        <!-- 名前 -->
+        <div class="form-row">
+          <div class="form-group">
+            <label for="last-name">お名前（姓） <span class="required">*</span></label>
+            <input type="text" id="last-name" name="lastName" placeholder="山田" required>
+            <span class="error-text" id="last-name-error">姓を入力してください。</span>
+          </div>
+          <div class="form-group">
+            <label for="first-name">お名前（名） <span class="required">*</span></label>
+            <input type="text" id="first-name" name="firstName" placeholder="太郎" required>
+            <span class="error-text" id="first-name-error">名を入力してください。</span>
+          </div>
+        </div>
+
+        <!-- 連絡先 -->
+        <div class="form-group">
+          <label for="phone">電話番号 <span class="required">*</span></label>
+          <input type="tel" id="phone" name="phone" placeholder="090-0000-0000" required>
+          <span class="error-text" id="phone-error">電話番号を入力してください。</span>
+        </div>
+
+        <div class="form-group">
+          <label for="email">メールアドレス <span class="required">*</span></label>
+          <input type="email" id="email" name="email" placeholder="example@email.com" required>
+          <span class="error-text" id="email-error">有効なメールアドレスを入力してください。</span>
+        </div>
+
+        <hr class="divider">
+
+        <!-- 備考 -->
+        <div class="form-group">
+          <label for="notes">備考・アレルギー等</label>
+          <textarea id="notes" name="notes" placeholder="アレルギーやご要望があればご記入ください。"></textarea>
+        </div>
+
+        <button type="submit" class="btn-submit">予約を送信する</button>
+
+      </form>
+
+      <!-- Success -->
+      <div class="success-message" id="successMessage">
+        <div class="success-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#2ecc71" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"/>
+          </svg>
+        </div>
+        <h2>ご予約を承りました</h2>
+        <p id="confirmText"></p>
+        <button class="btn-back" onclick="resetForm()">別の予約をする</button>
+      </div>
+
+    </div>
+
+    <p class="note">
+      ご予約はご来店の2時間前まで受け付けております。<br>
+      7名様以上のご来店はお電話にてお問い合わせください。<br>
+      TEL: 03-0000-0000（営業時間 10:00〜18:00）
+    </p>
+  </main>
+
+  <script>
+    // Set minimum date to today
+    const dateInput = document.getElementById('date');
+    const today = new Date().toISOString().split('T')[0];
+    dateInput.setAttribute('min', today);
+
+    function validateField(id, errorId, customCheck) {
+      const field = document.getElementById(id);
+      const error = document.getElementById(errorId);
+      const isEmpty = !field.value.trim();
+      const isInvalid = customCheck ? customCheck(field.value) : isEmpty;
+
+      if (isInvalid) {
+        field.classList.add('invalid');
+        error.classList.add('visible');
+        return false;
+      } else {
+        field.classList.remove('invalid');
+        error.classList.remove('visible');
+        return true;
+      }
+    }
+
+    function isValidEmail(val) {
+      return !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val);
+    }
+
+    document.getElementById('reservationForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const checks = [
+        validateField('date', 'date-error'),
+        validateField('time', 'time-error'),
+        validateField('guests', 'guests-error'),
+        validateField('last-name', 'last-name-error'),
+        validateField('first-name', 'first-name-error'),
+        validateField('phone', 'phone-error'),
+        validateField('email', 'email-error', isValidEmail),
+      ];
+
+      if (checks.every(Boolean)) {
+        const lastName = document.getElementById('last-name').value;
+        const firstName = document.getElementById('first-name').value;
+        const date = document.getElementById('date').value;
+        const time = document.getElementById('time').value;
+        const guests = document.getElementById('guests').options[document.getElementById('guests').selectedIndex].text;
+
+        const [y, m, d] = date.split('-');
+        const formattedDate = `${y}年${parseInt(m)}月${parseInt(d)}日`;
+
+        document.getElementById('confirmText').innerHTML =
+          `${lastName} ${firstName} 様<br>${formattedDate} ${time} / ${guests}<br><br>確認のご連絡をさせていただく場合がございます。`;
+
+        document.getElementById('reservationForm').style.display = 'none';
+        document.getElementById('successMessage').style.display = 'block';
+      }
+    });
+
+    // Live validation on blur
+    ['date', 'time', 'guests', 'last-name', 'first-name', 'phone'].forEach(id => {
+      document.getElementById(id).addEventListener('blur', () => {
+        validateField(id, `${id}-error`);
+      });
+    });
+    document.getElementById('email').addEventListener('blur', () => {
+      validateField('email', 'email-error', isValidEmail);
+    });
+
+    function resetForm() {
+      document.getElementById('reservationForm').reset();
+      document.getElementById('reservationForm').style.display = 'block';
+      document.getElementById('successMessage').style.display = 'none';
+      document.querySelectorAll('.invalid').forEach(el => el.classList.remove('invalid'));
+      document.querySelectorAll('.error-text.visible').forEach(el => el.classList.remove('visible'));
+    }
+  </script>
+
+</body>
+</html>
