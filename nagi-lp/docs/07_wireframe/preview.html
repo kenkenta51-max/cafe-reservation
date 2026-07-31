@@ -423,7 +423,9 @@
     :root { --sec-pad: 72px; --sec-pad-strong: 104px; }
     .container { padding-inline: var(--sp-24); }
     .hero { grid-template-columns: 1fr; gap: var(--sp-48); }
-    .grid-3 { grid-template-columns: 1fr 1fr; }
+    /* grid-3 の項目数はいずれも3つなので、タブレットでも3カラムを維持する
+       （2カラムにすると 2+1 で余りが出るため） */
+    .grid-3 { gap: var(--sp-24); }
     .h1 { font-size: 44px; }
     .h2 { font-size: 32px; }
   }
@@ -576,16 +578,16 @@
   <div class=&quot;container&quot;>
     <div class=&quot;anno&quot;>
       <span class=&quot;anno__num&quot;>04</span>
-      <span class=&quot;anno__name&quot;>5つの特徴</span>
+      <span class=&quot;anno__name&quot;>3つの特徴</span>
       <span class=&quot;anno__tag&quot;>心理：解決策の理解</span>
       <span class=&quot;anno__tag anno__tag--p2&quot;>重要</span>
       <span class=&quot;anno__tag&quot;>CTAなし（直後にCTA②）</span>
-      <span class=&quot;anno__count&quot;>見出し18字／本文33字</span>
+      <span class=&quot;anno__count&quot;>見出し18字／本文28字</span>
     </div>
 
-    <h2 class=&quot;h2&quot;>暮らしに、静かに寄り添う5つの工夫。</h2>
-    <p class=&quot;lead&quot;>機能も、見た目も、手を抜いていません。</p>
-    <p class=&quot;body&quot;>NAGIには、日々の使いやすさを支える5つの工夫があります。</p>
+    <h2 class=&quot;h2&quot;>暮らしに、静かに寄り添う3つの工夫。</h2>
+    <p class=&quot;lead&quot;>毎日使うものだから、手間をかけさせません。</p>
+    <p class=&quot;body&quot;>NAGIには、日々の使いやすさを支える3つの工夫があります。</p>
 
     <div class=&quot;grid-3&quot;>
       <div class=&quot;card&quot;>
@@ -600,16 +602,8 @@
         <div class=&quot;ph ph--icon&quot;><span class=&quot;ph__meta&quot;>アイコン</span></div>
         <p class=&quot;card__t&quot;>工具を使わず分解して洗える抗菌タンク</p>
       </div>
-      <div class=&quot;card&quot;>
-        <div class=&quot;ph ph--icon&quot;><span class=&quot;ph__meta&quot;>アイコン</span></div>
-        <p class=&quot;card__t&quot;>インテリアに馴染むミニマルなデザイン（3色展開）</p>
-      </div>
-      <div class=&quot;card&quot;>
-        <div class=&quot;ph ph--icon&quot;><span class=&quot;ph__meta&quot;>アイコン</span></div>
-        <p class=&quot;card__t&quot;>満水・空焚きになると自動で止まる安全設計</p>
-      </div>
     </div>
-    <p class=&quot;cap&quot; style=&quot;margin-top:var(--sp-16)&quot;>アイコン5点<span class=&quot;todo&quot;>現物なし — 作成が必要（線画で統一）</span></p>
+    <p class=&quot;cap&quot; style=&quot;margin-top:var(--sp-16)&quot;>アイコン3点<span class=&quot;todo&quot;>現物なし — 作成が必要（線画で統一）</span></p>
   </div>
 </section>
 
@@ -792,16 +786,17 @@
       <span class=&quot;anno__tag anno__tag--p3&quot;>補足</span>
       <span class=&quot;anno__tag&quot;>CTAなし</span>
       <span class=&quot;anno__tag&quot;>画像なし</span>
-      <span class=&quot;anno__count&quot;>見出し15字／本文44字</span>
+      <span class=&quot;anno__count&quot;>見出し15字／本文101字</span>
     </div>
 
     <h2 class=&quot;h2&quot;>安心して、試していただくために。</h2>
     <p class=&quot;lead&quot;>万が一のときも、サポートします。</p>
-    <p class=&quot;body&quot;>NAGIには、購入後30日間の返品保証と、1年間のメーカー保証がついています。</p>
+    <p class=&quot;body&quot;>NAGIには、購入後30日間の返品保証と、1年間のメーカー保証がついています。水がなくなったときや満水になったときは自動で運転を止めるため、つけっぱなしでも安心してお使いいただけます。</p>
 
-    <div class=&quot;grid-2&quot; style=&quot;margin-top:var(--sp-32)&quot;>
+    <div class=&quot;grid-3&quot;>
       <div class=&quot;card&quot;><p class=&quot;card__n&quot;>保証01</p><p class=&quot;card__t&quot;>購入後30日間の返品保証</p></div>
       <div class=&quot;card&quot;><p class=&quot;card__n&quot;>保証02</p><p class=&quot;card__t&quot;>1年間のメーカー保証</p></div>
+      <div class=&quot;card&quot;><p class=&quot;card__n&quot;>安全</p><p class=&quot;card__t&quot;>満水・空焚きになると自動で止まる安全設計</p></div>
     </div>
 
     <h3 class=&quot;h3&quot; style=&quot;margin-top:var(--sp-48)&quot;>スペック</h3>
@@ -811,6 +806,7 @@
         <tr><th>重量</th><td>約1.1kg（水を入れない状態）</td></tr>
         <tr><th>タンク容量</th><td>2.5L（満水で約20時間連続運転）</td></tr>
         <tr><th>静音性</th><td>20dB以下（最小運転時）</td></tr>
+        <tr><th>安全機能</th><td>満水検知・空焚き防止による自動停止</td></tr>
         <tr><th>対応通信</th><td>Wi-Fi 2.4GHz帯</td></tr>
         <tr><th>対応アプリ</th><td>iOS 15以降／Android 11以降</td></tr>
       </tbody>
@@ -1135,7 +1131,9 @@
     :root { --sec-pad: 72px; --sec-pad-strong: 104px; }
     .container { padding-inline: var(--sp-24); }
     .hero { grid-template-columns: 1fr; gap: var(--sp-48); }
-    .grid-3 { grid-template-columns: 1fr 1fr; }
+    /* grid-3 の項目数はいずれも3つなので、タブレットでも3カラムを維持する
+       （2カラムにすると 2+1 で余りが出るため） */
+    .grid-3 { gap: var(--sp-24); }
     .h1 { font-size: 44px; }
     .h2 { font-size: 32px; }
   }
@@ -1288,16 +1286,16 @@
   <div class=&quot;container&quot;>
     <div class=&quot;anno&quot;>
       <span class=&quot;anno__num&quot;>04</span>
-      <span class=&quot;anno__name&quot;>5つの特徴</span>
+      <span class=&quot;anno__name&quot;>3つの特徴</span>
       <span class=&quot;anno__tag&quot;>心理：解決策の理解</span>
       <span class=&quot;anno__tag anno__tag--p2&quot;>重要</span>
       <span class=&quot;anno__tag&quot;>CTAなし（直後にCTA②）</span>
-      <span class=&quot;anno__count&quot;>見出し18字／本文33字</span>
+      <span class=&quot;anno__count&quot;>見出し18字／本文28字</span>
     </div>
 
-    <h2 class=&quot;h2&quot;>暮らしに、静かに寄り添う5つの工夫。</h2>
-    <p class=&quot;lead&quot;>機能も、見た目も、手を抜いていません。</p>
-    <p class=&quot;body&quot;>NAGIには、日々の使いやすさを支える5つの工夫があります。</p>
+    <h2 class=&quot;h2&quot;>暮らしに、静かに寄り添う3つの工夫。</h2>
+    <p class=&quot;lead&quot;>毎日使うものだから、手間をかけさせません。</p>
+    <p class=&quot;body&quot;>NAGIには、日々の使いやすさを支える3つの工夫があります。</p>
 
     <div class=&quot;grid-3&quot;>
       <div class=&quot;card&quot;>
@@ -1312,16 +1310,8 @@
         <div class=&quot;ph ph--icon&quot;><span class=&quot;ph__meta&quot;>アイコン</span></div>
         <p class=&quot;card__t&quot;>工具を使わず分解して洗える抗菌タンク</p>
       </div>
-      <div class=&quot;card&quot;>
-        <div class=&quot;ph ph--icon&quot;><span class=&quot;ph__meta&quot;>アイコン</span></div>
-        <p class=&quot;card__t&quot;>インテリアに馴染むミニマルなデザイン（3色展開）</p>
-      </div>
-      <div class=&quot;card&quot;>
-        <div class=&quot;ph ph--icon&quot;><span class=&quot;ph__meta&quot;>アイコン</span></div>
-        <p class=&quot;card__t&quot;>満水・空焚きになると自動で止まる安全設計</p>
-      </div>
     </div>
-    <p class=&quot;cap&quot; style=&quot;margin-top:var(--sp-16)&quot;>アイコン5点<span class=&quot;todo&quot;>現物なし — 作成が必要（線画で統一）</span></p>
+    <p class=&quot;cap&quot; style=&quot;margin-top:var(--sp-16)&quot;>アイコン3点<span class=&quot;todo&quot;>現物なし — 作成が必要（線画で統一）</span></p>
   </div>
 </section>
 
@@ -1504,16 +1494,17 @@
       <span class=&quot;anno__tag anno__tag--p3&quot;>補足</span>
       <span class=&quot;anno__tag&quot;>CTAなし</span>
       <span class=&quot;anno__tag&quot;>画像なし</span>
-      <span class=&quot;anno__count&quot;>見出し15字／本文44字</span>
+      <span class=&quot;anno__count&quot;>見出し15字／本文101字</span>
     </div>
 
     <h2 class=&quot;h2&quot;>安心して、試していただくために。</h2>
     <p class=&quot;lead&quot;>万が一のときも、サポートします。</p>
-    <p class=&quot;body&quot;>NAGIには、購入後30日間の返品保証と、1年間のメーカー保証がついています。</p>
+    <p class=&quot;body&quot;>NAGIには、購入後30日間の返品保証と、1年間のメーカー保証がついています。水がなくなったときや満水になったときは自動で運転を止めるため、つけっぱなしでも安心してお使いいただけます。</p>
 
-    <div class=&quot;grid-2&quot; style=&quot;margin-top:var(--sp-32)&quot;>
+    <div class=&quot;grid-3&quot;>
       <div class=&quot;card&quot;><p class=&quot;card__n&quot;>保証01</p><p class=&quot;card__t&quot;>購入後30日間の返品保証</p></div>
       <div class=&quot;card&quot;><p class=&quot;card__n&quot;>保証02</p><p class=&quot;card__t&quot;>1年間のメーカー保証</p></div>
+      <div class=&quot;card&quot;><p class=&quot;card__n&quot;>安全</p><p class=&quot;card__t&quot;>満水・空焚きになると自動で止まる安全設計</p></div>
     </div>
 
     <h3 class=&quot;h3&quot; style=&quot;margin-top:var(--sp-48)&quot;>スペック</h3>
@@ -1523,6 +1514,7 @@
         <tr><th>重量</th><td>約1.1kg（水を入れない状態）</td></tr>
         <tr><th>タンク容量</th><td>2.5L（満水で約20時間連続運転）</td></tr>
         <tr><th>静音性</th><td>20dB以下（最小運転時）</td></tr>
+        <tr><th>安全機能</th><td>満水検知・空焚き防止による自動停止</td></tr>
         <tr><th>対応通信</th><td>Wi-Fi 2.4GHz帯</td></tr>
         <tr><th>対応アプリ</th><td>iOS 15以降／Android 11以降</td></tr>
       </tbody>
