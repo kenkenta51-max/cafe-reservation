@@ -3,37 +3,58 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NAGI（凪）スマート加湿器 ｜ 置いているだけで、部屋が整う加湿器。</title>
-<meta name="description" content="デザインを妥協せず、手間なく最適な湿度を保てるスマート加湿器NAGI。スマホで湿度を管理でき、20dB以下の静音設計。12,800円（税込）、30日間返品保証。">
+
+<title>スマート加湿器 NAGI（凪）｜置いているだけで、部屋が整う加湿器。</title>
+<meta name="description" content="デザインを妥協せず、手間なく最適な湿度を保てるスマート加湿器NAGI。スマホで湿度を管理でき、20dB以下の静音設計。12,800円（税込）、30日間返品保証・1年間メーカー保証。">
+<link rel="canonical" href="https://nagilab.co.jp/pages/nagi">
+<meta name="robots" content="index,follow">
+<meta name="theme-color" content="#2F4A3E">
+
+<!-- OGP -->
+<meta property="og:type" content="product">
+<meta property="og:site_name" content="株式会社Nagi Lab">
+<meta property="og:title" content="スマート加湿器 NAGI（凪）｜置いているだけで、部屋が整う加湿器。">
+<meta property="og:description" content="インテリアに馴染むミニマルなデザインと、スマホで完結する湿度管理。20dB以下の静音設計、工具不要の抗菌タンク。12,800円（税込）。">
+<meta property="og:url" content="https://nagilab.co.jp/pages/nagi">
+<meta property="og:image" content="https://nagilab.co.jp/pages/nagi/images/ogp.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="ディープグリーンのスマート加湿器NAGIと、キャッチコピー「置いているだけで、部屋が整う加湿器。」">
+<meta property="og:locale" content="ja_JP">
+<meta name="twitter:card" content="summary_large_image">
+
+<!-- favicon -->
+<link rel="icon" href="../public/images/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../public/images/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="../public/images/apple-touch-icon.png">
+
 <style>
 /* ============================================================================
-   NAGI（凪）LP
-   数値は docs/04_design-system.md に準拠。未定義項目は
-   rules/common-design-rules.md から導出（角丸・影・グリーン地でのボタン反転）。
-   現在の実装範囲：ファーストビュー／強み・選ばれる理由／CTA
+   NAGI（凪）スマート加湿器 LP
+   数値は docs/04_design-system.md に準拠。
+   未定義項目（角丸・影・グリーン地でのボタン反転）は
+   rules/common-design-rules.md から導出。
+   構成 docs/05_structure.md ／ 原稿 docs/06_copy.md（改変せず使用）
    ========================================================================== */
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
   /* ---- カラー（04_design-system §1） ---- */
-  --c-base:    #FAFAF8;  /* オフホワイト   ベース 約60% */
+  --c-base:    #FAFAF8;  /* オフホワイト  ベース 約60% */
   /* ミストグレー。ベージュ地では 4.20:1 と本文基準に届かないため、
      テキストには使わず罫線・図解などの非テキスト要素に限定する */
   --c-main:    #6B7280;
   --c-key:     #2F4A3E;  /* ディープグリーン キー 約10% */
-  --c-sub:     #C9BBA0;  /* サンドベージュ サブ 約10% */
+  --c-sub:     #C9BBA0;  /* サンドベージュ  サブ 約10% */
   --c-text:    #23272A;  /* ダークグレー   本文・見出し */
+  --c-muted:   #5F6B66;  /* 補助テキスト（04改訂済み。ベージュ地 4.76:1） */
 
-  /* 補助テキスト。04の指定値 #8A9490 は13px本文で 2.68:1 となり
-     04 §1「本文4.5:1以上」を満たさないため、同系色のまま明度を下げた。
-     ベージュ地で4.81:1、オフホワイト地で5.35:1。04の更新を要承認 */
-  --c-muted:   #5F6B66;
-
-  /* 派生色（ベース・キーから算出。新規の色相は増やさない） */
+  /* 派生色。新規の色相は増やさない */
   --c-beige-bg: #F2EDE3; /* サンドベージュをベースへ寄せた地 */
   --c-key-hi:   #3A5C4D; /* キーの明度+10%（ホバー） */
   --c-line:     #E2E1DC; /* ベースに対するヘアライン */
+  --c-key-deep: #24382E; /* キーより暗い面。フッター用 */
 
   /* ---- 余白スケール（04 §3。この9値以外は使わない） ---- */
   --sp-4: 4px; --sp-8: 8px; --sp-12: 12px; --sp-16: 16px;
@@ -41,13 +62,11 @@
 
   /* ---- レイアウト ---- */
   --container: 1140px;
-  --sec-pad: var(--sp-96);   /* 標準セクション余白 */
-  --sec-pad-lg: 140px;       /* 強調セクション余白 */
+  --sec-pad: var(--sp-96);
+  --sec-pad-lg: 140px;
 
-  /* ---- 角丸は1段階のみ（PART10-2「信頼・堅実」の下限） ---- */
-  --radius: 4px;
+  --radius: 4px;   /* 角丸は1段階のみ */
 
-  /* ---- モーション（04 §6） ---- */
   --dur: 240ms;
   --ease: cubic-bezier(.22, .61, .36, 1);
 }
@@ -55,7 +74,7 @@
 html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
 
 body {
-  /* Webフォント未読込。実装時は Noto Sans JP を self-host した woff2 に差し替える */
+  /* Webフォント未読込。STEP8で Noto Sans JP の self-host woff2 へ差し替え予定 */
   font-family: 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', 'Noto Sans JP',
                'Yu Gothic Medium', 'Yu Gothic', system-ui, sans-serif;
   background: var(--c-base);
@@ -70,35 +89,55 @@ img { max-width: 100%; height: auto; display: block; }
 
 :focus-visible { outline: 2px solid var(--c-key); outline-offset: 3px; }
 
-.container {
-  width: 100%;
-  max-width: var(--container);
-  margin-inline: auto;
-  padding-inline: var(--sp-32);
+/* キーボード利用者向けのスキップリンク */
+.skip {
+  position: absolute; left: var(--sp-16); top: -100px; z-index: 100;
+  padding: var(--sp-12) var(--sp-24);
+  background: var(--c-key); color: #fff; border-radius: var(--radius);
+  font-size: 15px; font-weight: 700; text-decoration: none;
+  transition: top var(--dur) var(--ease);
 }
+.skip:focus { top: var(--sp-16); }
+
+.container {
+  width: 100%; max-width: var(--container);
+  margin-inline: auto; padding-inline: var(--sp-32);
+}
+.container--narrow { max-width: 800px; }
 
 /* ---------------------------------------------------------------------------
    タイポグラフィ（04 §2）
    ------------------------------------------------------------------------- */
-.h1 {
-  font-size: 56px; line-height: 1.2; font-weight: 700;
-  letter-spacing: .01em; text-wrap: balance;
-}
-.h2 {
-  font-size: 36px; line-height: 1.3; font-weight: 700;
-  letter-spacing: .01em; text-wrap: balance;
-}
-.h3 { font-size: 22px; line-height: 1.4; font-weight: 500; }
+.h1 { font-size: 56px; line-height: 1.2; font-weight: 700; letter-spacing: .01em; text-wrap: balance; }
+.h2 { font-size: 36px; line-height: 1.3; font-weight: 700; letter-spacing: .01em; text-wrap: balance; }
+.h3 { font-size: 22px; line-height: 1.4; font-weight: 700; }
 
 .lead { font-size: 18px; line-height: 1.7; color: var(--c-muted); }
 .body { font-size: 16px; line-height: 1.9; max-width: 34em; }
 .cap  { font-size: 13px; line-height: 1.7; color: var(--c-muted); }
 
-/* セクションラベル。日本語見出しより目立たせない（PART6-6） */
-.eyebrow {
-  font-size: 13px; font-weight: 700;
-  letter-spacing: .18em; color: var(--c-muted);
-}
+.eyebrow { font-size: 13px; font-weight: 700; letter-spacing: .18em; color: var(--c-muted); }
+
+/* 意味のまとまりで折り返すための塊。語中での改行を防ぐ（PART6-4） */
+.nb { display: inline-block; }
+
+.mt-16 { margin-top: var(--sp-16); }
+.mt-24 { margin-top: var(--sp-24); }
+.mt-32 { margin-top: var(--sp-32); }
+.mt-48 { margin-top: var(--sp-48); }
+
+/* ---------------------------------------------------------------------------
+   セクション共通
+   ------------------------------------------------------------------------- */
+.sec        { padding-block: var(--sec-pad); }
+.sec--lg    { padding-block: var(--sec-pad-lg); }
+.sec--beige { background: var(--c-beige-bg); }
+.sec--key   { background: var(--c-key); color: #fff; }
+
+/* 見出しは折り返し位置が不自然にならないよう幅を絞りすぎない。
+   読み幅の制御は .body / .lead 側で行う（PART6-4） */
+.sec__head { max-width: 46em; }
+.sec__head .lead { max-width: 34em; }
 
 /* ---------------------------------------------------------------------------
    ボタン（04 §5）
@@ -107,11 +146,10 @@ img { max-width: 100%; height: auto; display: block; }
   display: inline-flex; align-items: center; justify-content: center;
   min-height: 52px; padding: var(--sp-12) var(--sp-32);
   border: 1px solid transparent; border-radius: var(--radius);
-  font-size: 17px; font-weight: 700; line-height: 1.4;
+  font-family: inherit; font-size: 17px; font-weight: 700; line-height: 1.4;
   text-decoration: none; cursor: pointer;
   transition: background-color var(--dur) var(--ease), color var(--dur) var(--ease);
 }
-/* 明るい地の上：キー色ベタ＋白文字 */
 .btn--primary { background: var(--c-key); color: #fff; }
 .btn--primary:hover { background: var(--c-key-hi); }
 
@@ -119,17 +157,20 @@ img { max-width: 100%; height: auto; display: block; }
 .btn--onkey { background: #fff; color: var(--c-key); }
 .btn--onkey:hover { background: var(--c-beige-bg); }
 
+/* 補助CTA。主要CTAより弱く表示する（PART8-1） */
+.btn--ghost { background: transparent; color: var(--c-text); border-color: var(--c-main); }
+.btn--ghost:hover { background: rgba(107,114,128,.08); }
+
 .btn__price { font-size: 14px; font-weight: 400; margin-left: var(--sp-8); opacity: .9; }
 
 /* ---------------------------------------------------------------------------
    ヘッダー
    ------------------------------------------------------------------------- */
-.head {
-  position: relative; z-index: 2;
-  padding-block: var(--sp-24);
-}
+.head { padding-block: var(--sp-24); }
 .head__inner { display: flex; align-items: center; justify-content: space-between; gap: var(--sp-16); }
+/* 独立したリンクはタップ領域44px以上を確保する（04 §5・PART12-2） */
 .logo {
+  display: inline-flex; align-items: center; min-height: 44px;
   font-size: 20px; font-weight: 700; letter-spacing: .22em;
   color: var(--c-key); text-decoration: none;
 }
@@ -138,93 +179,183 @@ img { max-width: 100%; height: auto; display: block; }
 /* ---------------------------------------------------------------------------
    1. ファーストビュー
    ------------------------------------------------------------------------- */
-.fv {
-  padding-block: var(--sp-64) var(--sec-pad-lg);
-  background: var(--c-base);
-}
-.fv__grid {
-  display: grid; grid-template-columns: 1.05fr .95fr;
-  gap: var(--sp-64); align-items: center;
-}
-.fv__lead { margin-top: var(--sp-24); }
-.fv__body { margin-top: var(--sp-24); }
-.fv__cta  { margin-top: var(--sp-48); }
-.fv__note { margin-top: var(--sp-16); }
-
-/* 商品単体写真。現素材の背景は純白ではなくベース地に溶け込まないため、
-   写真パネルとして扱う。切り抜き素材が支給されれば背景なしで配置できる */
+.fv { padding-block: var(--sp-64) var(--sec-pad-lg); }
+.fv__grid { display: grid; grid-template-columns: 1.15fr .85fr; gap: var(--sp-64); align-items: center; }
+.fv__cta { margin-top: var(--sp-48); }
+/* 現素材の背景は純白ではなくベース地に溶け込まないため写真パネルとして扱う。
+   背景透過素材が支給され次第、地に製品が浮く配置へ差し替える */
 .fv__figure { margin: 0; }
 .fv__figure img { width: 100%; border-radius: var(--radius); }
 
-/* 保証などの短い根拠。アイコンは使わず、区切りは中黒で最小限に */
-.trust {
-  display: flex; flex-wrap: wrap; gap: var(--sp-8) var(--sp-16);
-  font-size: 13px; color: var(--c-muted);
-}
+.trust { display: flex; flex-wrap: wrap; gap: var(--sp-8) var(--sp-16); font-size: 13px; color: var(--c-muted); }
 .trust li { list-style: none; }
 .trust li + li { padding-left: var(--sp-16); border-left: 1px solid var(--c-line); }
 
 /* ---------------------------------------------------------------------------
-   2. 強み・選ばれる理由
+   2. 悩みの提示（画像を使わずテキストのみで構成）
    ------------------------------------------------------------------------- */
-.reason {
-  padding-block: var(--sec-pad);
-  background: var(--c-beige-bg); /* 章の変化を背景で示す（PART4-2） */
+.pains { margin-top: var(--sp-48); border-top: 1px solid var(--c-line); }
+.pain {
+  display: flex; align-items: flex-start; gap: var(--sp-24);
+  padding-block: var(--sp-24); border-bottom: 1px solid var(--c-line);
 }
-.reason__grid {
-  display: grid; grid-template-columns: 1fr 1fr;
-  gap: var(--sp-64); align-items: start;
-}
-.reason__lead { margin-top: var(--sp-16); }
-.reason__body { margin-top: var(--sp-24); }
+.pain__n { font-size: 13px; font-weight: 700; color: var(--c-sub); font-variant-numeric: tabular-nums; padding-top: var(--sp-4); }
+.pain__t { font-size: 20px; font-weight: 700; line-height: 1.5; }
 
-/* 実績数値。カード化せず、罫線で区切る（PART15-1「全要素のカード化」を回避） */
+/* ---------------------------------------------------------------------------
+   3. 価値提案（カラーバリエーション）
+   ------------------------------------------------------------------------- */
+.colors { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--sp-32); margin-top: var(--sp-48); }
+.color__name { font-size: 15px; font-weight: 700; margin-top: var(--sp-12); }
+.color__note { font-size: 12px; color: var(--c-muted); margin-top: var(--sp-4); }
+.color img { width: 100%; border-radius: var(--radius); }
+
+/* 素材未支給のプレースホルダ。本番前に実写へ差し替える */
+.ph {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: var(--sp-8); padding: var(--sp-24); text-align: center;
+  background: #EDEDEA; border: 2px dashed var(--c-main); border-radius: var(--radius);
+  color: #4A5350;
+}
+.ph__label { font-size: 14px; font-weight: 700; }
+.ph__note  { font-size: 12px; line-height: 1.6; }
+.ph--1x1 { aspect-ratio: 1 / 1; }
+.ph--4x3 { aspect-ratio: 4 / 3; }
+
+/* ---------------------------------------------------------------------------
+   4. 主な特徴
+   ------------------------------------------------------------------------- */
+.features { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--sp-48); margin-top: var(--sp-48); }
+.feature__icon { width: 40px; height: 40px; color: var(--c-key); }
+.feature__t { font-size: 19px; font-weight: 700; line-height: 1.5; margin-top: var(--sp-16); }
+.feature__d { font-size: 15px; color: var(--c-muted); margin-top: var(--sp-8); }
+
+/* CTA帯（セクション間の節目に置く独立CTA） */
+.cta-band { padding-block: var(--sp-64); background: var(--c-beige-bg); border-block: 1px solid var(--c-sub); text-align: center; }
+.cta-band--base { background: var(--c-base); border-color: var(--c-line); }
+.cta-band__sub { margin-top: var(--sp-12); font-size: 14px; color: var(--c-muted); }
+
+/* ---------------------------------------------------------------------------
+   5. アプリ連携（合成せず現物2枚を並置）
+   ------------------------------------------------------------------------- */
+.app { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-64); align-items: center; }
+.app__shots { display: grid; grid-template-columns: 1.15fr .85fr; gap: var(--sp-16); align-items: end; }
+.app__shots img { width: 100%; border-radius: var(--radius); }
+.app__list { margin-top: var(--sp-24); padding-left: 1.3em; }
+.app__list li { font-size: 16px; margin-bottom: var(--sp-8); }
+
+/* ---------------------------------------------------------------------------
+   6. 生活空間での使用シーン
+   ------------------------------------------------------------------------- */
+.scene__figure { margin: var(--sp-48) 0 0; }
+.scene__figure img { width: 100%; border-radius: var(--radius); }
+.scene__cap { margin-top: var(--sp-12); }
+
+/* ---------------------------------------------------------------------------
+   7. 選ばれる理由・実績
+   ------------------------------------------------------------------------- */
+.reason__grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-64); align-items: start; }
+/* 実績数値。カード化せず罫線で区切る（PART15-1「全要素のカード化」を回避） */
 .stats { margin-top: var(--sp-48); border-top: 1px solid var(--c-sub); }
 .stat {
-  display: flex; align-items: baseline; justify-content: space-between;
-  gap: var(--sp-16);
-  padding-block: var(--sp-24);
-  border-bottom: 1px solid var(--c-sub);
+  display: flex; align-items: baseline; justify-content: space-between; gap: var(--sp-16);
+  padding-block: var(--sp-24); border-bottom: 1px solid var(--c-sub);
 }
 .stat__label { font-size: 14px; color: var(--c-muted); }
-.stat__value {
-  font-size: 40px; line-height: 1.1; font-weight: 700;
-  color: var(--c-key);
-  font-variant-numeric: tabular-nums;
-}
+.stat__value { font-size: 40px; line-height: 1.1; font-weight: 700; color: var(--c-key); font-variant-numeric: tabular-nums; }
 .stat__unit { font-size: 18px; font-weight: 700; margin-left: var(--sp-4); }
-.stats__source { margin-top: var(--sp-12); }
-
-.reason__figure { margin: 0; }
-.reason__figure img { width: 100%; border-radius: var(--radius); }
-.reason__figcap { margin-top: var(--sp-12); }
 
 /* ---------------------------------------------------------------------------
-   3. CTA
+   8. よくある質問（details/summaryでJS無効でも開閉可）
    ------------------------------------------------------------------------- */
-.cta {
-  padding-block: var(--sec-pad-lg);
-  background: var(--c-key); /* キー色ベタ。ページ内で最も強い面 */
-  color: #fff;
-  text-align: center;
+.faq { margin-top: var(--sp-48); max-width: 42em; }
+.faq__item { border-bottom: 1px solid var(--c-line); }
+.faq__q {
+  display: flex; align-items: flex-start; gap: var(--sp-16);
+  padding-block: var(--sp-24); min-height: 44px;
+  font-size: 17px; font-weight: 700; line-height: 1.6;
+  cursor: pointer; list-style: none;
 }
-.cta__lead { margin-top: var(--sp-16); color: rgba(255,255,255,.82); }
-.cta__body {
-  margin-top: var(--sp-24); margin-inline: auto;
-  color: rgba(255,255,255,.9);
+.faq__q::-webkit-details-marker { display: none; }
+.faq__q::after {
+  content: ""; flex: none; width: 12px; height: 12px; margin-left: auto; margin-top: 8px;
+  border-right: 2px solid var(--c-key); border-bottom: 2px solid var(--c-key);
+  transform: rotate(45deg); transition: transform var(--dur) var(--ease);
 }
-.cta__action { margin-top: var(--sp-48); }
-.cta__sub {
-  margin-top: var(--sp-16); font-size: 13px; color: rgba(255,255,255,.72);
-}
-.cta__link {
-  display: inline-block; margin-top: var(--sp-24);
-  font-size: 14px; color: #fff;
-  text-underline-offset: 4px;
+.faq__item[open] .faq__q::after { transform: rotate(-135deg); }
+.faq__a { padding-bottom: var(--sp-24); font-size: 15px; line-height: 1.9; color: #3C4644; max-width: 38em; }
+
+/* ---------------------------------------------------------------------------
+   9. 保証・スペック
+   ------------------------------------------------------------------------- */
+.guarantees { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--sp-32); margin-top: var(--sp-48); }
+.guarantee { padding-top: var(--sp-16); border-top: 2px solid var(--c-key); }
+.guarantee__t { font-size: 17px; font-weight: 700; line-height: 1.5; }
+
+.spec { width: 100%; margin-top: var(--sp-32); border-collapse: collapse; font-size: 15px; }
+.spec th, .spec td { padding: var(--sp-12) var(--sp-16); border-bottom: 1px solid var(--c-line); text-align: left; vertical-align: top; }
+.spec th { width: 34%; font-weight: 700; color: var(--c-muted); white-space: nowrap; }
+
+/* ---------------------------------------------------------------------------
+   10. 最終CTA
+   ------------------------------------------------------------------------- */
+.final { text-align: center; }
+.final__body { margin-inline: auto; color: rgba(255,255,255,.9); max-width: 32em; }
+.final__lead { color: rgba(255,255,255,.82); }
+.final__sub { margin-top: var(--sp-16); font-size: 13px; color: rgba(255,255,255,.72); }
+.final__link {
+  display: inline-flex; align-items: center; min-height: 44px;
+  margin-top: var(--sp-16); padding-inline: var(--sp-8);
+  font-size: 14px; color: #fff; text-underline-offset: 4px;
 }
 
 /* ---------------------------------------------------------------------------
-   スマホ固定CTA（04 §5。一定スクロール後に表示）
+   問い合わせフォーム
+   ------------------------------------------------------------------------- */
+.form { margin-top: var(--sp-48); max-width: 520px; }
+.field { margin-bottom: var(--sp-24); }
+.field__label { display: block; font-size: 14px; font-weight: 700; margin-bottom: var(--sp-8); }
+.field__req { margin-left: var(--sp-8); padding: 2px var(--sp-8); border-radius: var(--radius);
+  background: var(--c-key); color: #fff; font-size: 11px; font-weight: 700; vertical-align: 2px; }
+.field__opt { margin-left: var(--sp-8); font-size: 12px; font-weight: 400; color: var(--c-muted); }
+.field__input, .field__area {
+  width: 100%; padding: var(--sp-12) var(--sp-16);
+  border: 1px solid var(--c-main); border-radius: var(--radius);
+  background: #fff; color: var(--c-text);
+  font-family: inherit; font-size: 16px; line-height: 1.6;
+}
+.field__input { min-height: 52px; }
+.field__area { min-height: 132px; resize: vertical; }
+.field__input:focus, .field__area:focus { outline: 2px solid var(--c-key); outline-offset: 1px; border-color: var(--c-key); }
+.field__hint { margin-top: var(--sp-8); font-size: 13px; color: var(--c-muted); }
+.field__error { margin-top: var(--sp-8); font-size: 13px; font-weight: 700; color: #8C2F1E; }
+.field__input[aria-invalid="true"], .field__area[aria-invalid="true"] { border-color: #8C2F1E; border-width: 2px; }
+
+.form__note { margin-top: var(--sp-24); font-size: 13px; color: var(--c-muted); }
+.form__submit { margin-top: var(--sp-32); }
+.form__done {
+  margin-top: var(--sp-24); padding: var(--sp-24);
+  border: 1px solid var(--c-key); border-radius: var(--radius); background: #fff;
+}
+.form__done p + p { margin-top: var(--sp-8); }
+
+/* ---------------------------------------------------------------------------
+   フッター
+   ------------------------------------------------------------------------- */
+.foot { padding-block: var(--sp-64); background: var(--c-key-deep); color: rgba(255,255,255,.86); font-size: 14px; }
+.foot__logo { font-size: 18px; font-weight: 700; letter-spacing: .22em; color: #fff; }
+.foot__links { list-style: none; display: flex; flex-wrap: wrap; gap: var(--sp-4) var(--sp-32); margin-top: var(--sp-16); }
+.foot__links a {
+  display: inline-flex; align-items: center; min-height: 44px;
+  color: rgba(255,255,255,.86); text-underline-offset: 4px;
+}
+.foot__links a:hover { color: #fff; }
+.foot__meta { margin-top: var(--sp-32); padding-top: var(--sp-24); border-top: 1px solid rgba(255,255,255,.2);
+  font-size: 12px; color: rgba(255,255,255,.66); }
+.foot__meta p + p { margin-top: var(--sp-8); }
+
+/* ---------------------------------------------------------------------------
+   スマホ固定CTA（04 §5）
    ------------------------------------------------------------------------- */
 .sticky {
   position: fixed; left: 0; right: 0; bottom: 0; z-index: 50;
@@ -239,15 +370,18 @@ img { max-width: 100%; height: auto; display: block; }
 .sticky .btn { width: 100%; }
 
 /* ---------------------------------------------------------------------------
-   スクロール時のフェードイン（04 §6。控えめに）
+   スクロール時のフェードイン（04 §6）
    JSが動く環境でのみ初期状態を隠す。JS無効・エラー時は最初から表示され、
    内容が読めなくなることはない（PART13-3「読む前に要素を隠す」の回避）
    ------------------------------------------------------------------------- */
-.js .reveal {
-  opacity: 0; transform: translateY(12px);
-  transition: opacity var(--dur) var(--ease), transform var(--dur) var(--ease);
-}
+.js .reveal { opacity: 0; transform: translateY(12px);
+  transition: opacity var(--dur) var(--ease), transform var(--dur) var(--ease); }
 .js .reveal.is-in { opacity: 1; transform: none; }
+
+.visually-hidden {
+  position: absolute; width: 1px; height: 1px; overflow: hidden;
+  clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap;
+}
 
 /* ===========================================================================
    タブレット 768〜1023px
@@ -256,9 +390,9 @@ img { max-width: 100%; height: auto; display: block; }
   :root { --sec-pad: 72px; --sec-pad-lg: 104px; }
   .container { padding-inline: var(--sp-24); }
 
-  .fv__grid { grid-template-columns: 1fr; gap: var(--sp-48); }
-  .fv__figure { max-width: 420px; margin-inline: auto; }
-  .reason__grid { grid-template-columns: 1fr; gap: var(--sp-48); }
+  .fv__grid, .app, .reason__grid { grid-template-columns: 1fr; gap: var(--sp-48); }
+  .fv__figure, .app__shots { max-width: 460px; margin-inline: auto; }
+  .features { gap: var(--sp-32); }
 
   .h1 { font-size: 44px; }
   .h2 { font-size: 32px; }
@@ -283,32 +417,87 @@ img { max-width: 100%; height: auto; display: block; }
 
   .fv { padding-block: var(--sp-32) var(--sec-pad-lg); }
   .fv__cta { margin-top: var(--sp-32); }
-  .fv__figure { max-width: none; }
+  .fv__figure, .app__shots { max-width: none; }
 
   .btn { width: 100%; font-size: 16px; }
   .btn__price { display: block; margin-left: 0; margin-top: var(--sp-4); }
 
-  /* 数値は縦積みにして、桁を大きく見せる */
+  .colors, .features, .guarantees { grid-template-columns: 1fr; gap: var(--sp-32); }
+  .pain { gap: var(--sp-16); }
+  .pain__t { font-size: 17px; }
   .stat { flex-direction: column; align-items: flex-start; gap: var(--sp-4); }
   .stat__value { font-size: 36px; }
+  .faq__q { font-size: 16px; }
+
+  /* スペック表はカード型に組み替え、横スクロールを出さない（PART12-2） */
+  .spec, .spec tbody, .spec tr, .spec th, .spec td { display: block; width: 100%; }
+  .spec tr { border-bottom: 1px solid var(--c-line); padding-block: var(--sp-12); }
+  .spec th { padding: 0 0 var(--sp-4); font-size: 13px; border: 0; white-space: normal; }
+  .spec td { padding: 0; border: 0; }
 
   .head__note { display: none; }
+  .foot__links { gap: var(--sp-12) var(--sp-24); }
+}
+
+/* ===========================================================================
+   極小幅 〜359px（iPhone SE より狭い端末）
+   04の指定は SP H1=36px だが、この幅では「加湿器。」が1文字だけ次行に残るため
+   見出しのみ縮める（PART6-4「1文字だけ次行へ残る状態を避ける」）
+   ========================================================================= */
+@media (max-width: 359px) {
+  .h1 { font-size: 30px; }
+  .h2 { font-size: 24px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .js .reveal { opacity: 1; transform: none; transition: none; }
-  .sticky { transition: none; }
-  .btn { transition: none; }
+  .sticky, .btn, .skip, .faq__q::after { transition: none; }
+}
+
+@media print {
+  .sticky, .skip { display: none; }
 }
 </style>
+
 <script>
   /* JSが動く環境だけフェードインの初期状態を適用する。
      スタイル適用前に実行してちらつきを防ぐ */
   document.documentElement.classList.add('js');
 </script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": "スマート加湿器 NAGI（凪）",
+  "description": "インテリアに馴染むミニマルなデザインと、スマホで完結する湿度管理を両立したスマート加湿器。20dB以下の静音設計、工具不要の抗菌タンク。",
+  "brand": { "@type": "Brand", "name": "NAGI" },
+  "manufacturer": { "@type": "Organization", "name": "株式会社Nagi Lab" },
+  "image": "https://nagilab.co.jp/pages/nagi/images/ogp.jpg",
+  "offers": {
+    "@type": "Offer",
+    "price": "12800",
+    "priceCurrency": "JPY",
+    "availability": "https://schema.org/InStock",
+    "url": "https://nagilab.co.jp/products/nagi",
+    "shippingDetails": {
+      "@type": "OfferShippingDetails",
+      "shippingRate": { "@type": "MonetaryAmount", "value": "800", "currency": "JPY" }
+    },
+    "hasMerchantReturnPolicy": {
+      "@type": "MerchantReturnPolicy",
+      "applicableCountry": "JP",
+      "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+      "merchantReturnDays": 30
+    }
+  }
+}
+</script>
 </head>
 <body>
+
+<a href="#main" class="skip">本文へスキップ</a>
 
 <header class="head">
   <div class="container head__inner">
@@ -317,17 +506,17 @@ img { max-width: 100%; height: auto; display: block; }
   </div>
 </header>
 
-<main>
+<main id="main">
 
   <!-- =====================================================================
-       1. ファーストビュー（興味）
+       1. ヒーロー（興味）／ CTA①
        ===================================================================== -->
   <section class="fv" aria-labelledby="fv-title">
     <div class="container fv__grid">
       <div>
         <h1 class="h1" id="fv-title">置いているだけで、<br>部屋が整う加湿器。</h1>
-        <p class="lead fv__lead">デザインも、湿度管理も、あきらめない。</p>
-        <p class="body fv__body">
+        <p class="lead mt-24">デザインも、湿度管理も、あきらめない。</p>
+        <p class="body mt-24">
           NAGIは、見た目も使い勝手も妥協したくない人のための加湿器です。
           スマホひとつで湿度を管理でき、静かに部屋に溶け込みます。
         </p>
@@ -338,7 +527,7 @@ img { max-width: 100%; height: auto; display: block; }
           </a>
         </p>
 
-        <ul class="trust fv__note">
+        <ul class="trust mt-16">
           <li>送料800円</li>
           <li>30日間返品保証</li>
           <li>1年間メーカー保証</li>
@@ -346,23 +535,258 @@ img { max-width: 100%; height: auto; display: block; }
       </div>
 
       <figure class="fv__figure">
-        <img src="../assets/original/nagi_product_white_01.png"
-             alt="ディープグリーンのスマート加湿器NAGI本体。上部の吹出口からミストが立ちのぼっている"
-             width="1086" height="1448">
+        <picture>
+          <source type="image/webp"
+                  srcset="../public/images/product-white-640.webp 640w,
+                          ../public/images/product-white-1024.webp 1024w"
+                  sizes="(max-width: 767px) 100vw, (max-width: 1023px) 460px, 44vw">
+          <img src="../public/images/product-white-1024.jpg"
+               srcset="../public/images/product-white-640.jpg 640w,
+                       ../public/images/product-white-1024.jpg 1024w"
+               sizes="(max-width: 767px) 100vw, (max-width: 1023px) 460px, 44vw"
+               alt="ディープグリーンのスマート加湿器NAGI本体。上部の吹出口からミストが立ちのぼっている"
+               width="1024" height="1365" fetchpriority="high" decoding="async">
+        </picture>
       </figure>
     </div>
   </section>
 
   <!-- =====================================================================
-       2. 強み・選ばれる理由（信頼）
+       2. 悩みの提示（共感）
+       画像は使わずテキストのみで構成する（クライアント確認済み）
        ===================================================================== -->
-  <section class="reason" aria-labelledby="reason-title">
+  <section class="sec sec--beige" aria-labelledby="pain-title">
+    <div class="container">
+      <div class="sec__head reveal">
+        <p class="eyebrow">こんな悩みはありませんか</p>
+        <h2 class="h2 mt-16" id="pain-title"><span class="nb">加湿器を置きたいのに、</span><span class="nb">置けない理由がある。</span></h2>
+        <p class="lead mt-16">なんとなく、後回しにしていませんか。</p>
+        <p class="body mt-24">
+          空気が乾燥すると、喉や肌の調子が気になります。それでも加湿器を置かない人は多くいます。
+          理由は「部屋に生活感が出てしまう」「手入れが面倒で続かない」という2つです。
+        </p>
+      </div>
+
+      <ul class="pains reveal">
+        <li class="pain">
+          <span class="pain__n">01</span>
+          <span class="pain__t"><span class="nb">乾燥で喉や肌の</span><span class="nb">調子を崩しやすい</span></span>
+        </li>
+        <li class="pain">
+          <span class="pain__n">02</span>
+          <span class="pain__t"><span class="nb">加湿器のデザインが</span><span class="nb">部屋に馴染まない</span></span>
+        </li>
+        <li class="pain">
+          <span class="pain__n">03</span>
+          <span class="pain__t"><span class="nb">フィルター掃除が</span><span class="nb">面倒で続かない</span></span>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- =====================================================================
+       3. 価値提案（解決策の理解①）
+       ===================================================================== -->
+  <section class="sec" aria-labelledby="value-title">
+    <div class="container">
+      <div class="sec__head reveal">
+        <p class="eyebrow">NAGIが解決すること</p>
+        <h2 class="h2 mt-16" id="value-title">デザインも、湿度管理も、妥協しない。</h2>
+        <p class="lead mt-16">両方を諦めなくていい理由があります。</p>
+        <p class="body mt-24">
+          NAGIは、インテリアに馴染むミニマルなデザインと、スマホで完結する湿度管理を両立させました。
+          見た目を選ぶか、使いやすさを選ぶか。その二択をなくすためにつくられています。
+        </p>
+      </div>
+
+      <ul class="colors reveal" style="list-style:none">
+        <li class="color">
+          <picture>
+            <source type="image/webp" srcset="../public/images/product-white-640.webp"
+                    sizes="(max-width: 767px) 100vw, 340px">
+            <img src="../public/images/product-white-640.jpg"
+                 sizes="(max-width: 767px) 100vw, 340px"
+                 alt="ディープグリーンのNAGI本体"
+                 width="640" height="853" loading="lazy" decoding="async"
+                 style="aspect-ratio:1/1;object-fit:cover;object-position:center 42%">
+          </picture>
+          <p class="color__name">ディープグリーン</p>
+          <p class="color__note">撮影済み</p>
+        </li>
+
+        <!-- TODO［素材未支給］ミストグレーの商品写真。
+             実物写真のない色を他画像で代用しないため、プレースホルダのまま。
+             撮影後に <img> へ差し替えること。 -->
+        <li class="color">
+          <div class="ph ph--1x1">
+            <span class="ph__label">ミストグレー</span>
+            <span class="ph__note">商品写真 未撮影<br>1:1 で差し替え</span>
+          </div>
+          <p class="color__name">ミストグレー</p>
+          <p class="color__note">撮影待ち</p>
+        </li>
+
+        <!-- TODO［素材未支給］サンドベージュの商品写真。上記と同じ扱い。 -->
+        <li class="color">
+          <div class="ph ph--1x1">
+            <span class="ph__label">サンドベージュ</span>
+            <span class="ph__note">商品写真 未撮影<br>1:1 で差し替え</span>
+          </div>
+          <p class="color__name">サンドベージュ</p>
+          <p class="color__note">撮影待ち</p>
+        </li>
+      </ul>
+      <p class="cap mt-16">全3色展開。ミストグレーとサンドベージュの商品写真は撮影後に掲載します。</p>
+    </div>
+  </section>
+
+  <!-- =====================================================================
+       4. 主な特徴（解決策の理解②）
+       アイコンは写真素材ではなくSVGの線画で作成（クライアント確認済み）
+       ===================================================================== -->
+  <section class="sec sec--beige" aria-labelledby="feature-title">
+    <div class="container">
+      <div class="sec__head reveal">
+        <p class="eyebrow">3つの特徴</p>
+        <h2 class="h2 mt-16" id="feature-title">暮らしに、静かに寄り添う3つの工夫。</h2>
+        <p class="lead mt-16">毎日使うものだから、手間をかけさせません。</p>
+        <p class="body mt-24">NAGIには、日々の使いやすさを支える3つの工夫があります。</p>
+      </div>
+
+      <ul class="features reveal" style="list-style:none">
+        <li class="feature">
+          <svg class="feature__icon" viewBox="0 0 40 40" fill="none" stroke="currentColor"
+               stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+            <rect x="13" y="4" width="14" height="24" rx="3"/>
+            <path d="M18 8h4"/>
+            <path d="M20 23.5h.01"/>
+            <path d="M9 33c3-2.5 7-3.8 11-3.8S28 30.5 31 33"/>
+          </svg>
+          <h3 class="feature__t"><span class="nb">スマホで遠隔・</span><span class="nb">自動操作ができる</span></h3>
+          <p class="feature__d">専用アプリで湿度と運転スケジュールを管理。外出先からも操作できます。</p>
+        </li>
+
+        <li class="feature">
+          <svg class="feature__icon" viewBox="0 0 40 40" fill="none" stroke="currentColor"
+               stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+            <path d="M6 20h4l4-7 5 14 4-9 3 4h8"/>
+            <circle cx="20" cy="20" r="15"/>
+          </svg>
+          <h3 class="feature__t"><span class="nb">20dB以下の</span><span class="nb">静かな運転音</span></h3>
+          <p class="feature__d">就寝時や在宅ワーク中でも気にならない静かさです。</p>
+        </li>
+
+        <li class="feature">
+          <svg class="feature__icon" viewBox="0 0 40 40" fill="none" stroke="currentColor"
+               stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+            <!-- 分解できる給水タンク：本体・取り外せる上部・水滴 -->
+            <path d="M12 17h16v14a4 4 0 0 1-4 4h-8a4 4 0 0 1-4-4z"/>
+            <path d="M12 24h16"/>
+            <path d="M10 17h20"/>
+            <path d="M20 4c0 0-4 5-4 7.5a4 4 0 0 0 8 0C24 9 20 4 20 4z"/>
+          </svg>
+          <h3 class="feature__t"><span class="nb">工具を使わず分解して</span><span class="nb">洗える抗菌タンク</span></h3>
+          <p class="feature__d">ワンタッチで分解でき、日々の手入れの手間を軽減します。</p>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- CTA② 機能訴求後（05_structure「CTA配置方針」） -->
+  <div class="cta-band cta-band--base">
+    <div class="container">
+      <a href="#" class="btn btn--primary">NAGIを購入する</a>
+      <p class="cta-band__sub">12,800円（税込）＋送料800円</p>
+    </div>
+  </div>
+
+  <!-- =====================================================================
+       5. アプリ連携（解決策の理解③）
+       実機とアプリ画面は合成せず、現物2枚を並べて配置（クライアント確認済み）
+       ===================================================================== -->
+  <section class="sec" aria-labelledby="app-title">
+    <div class="container app">
+      <div class="reveal">
+        <p class="eyebrow">スマホひとつで、湿度管理を</p>
+        <h2 class="h2 mt-16" id="app-title"><span class="nb">湿度のことは、</span><span class="nb">スマホに任せる。</span></h2>
+        <p class="lead mt-16">外出先からも、操作できます。</p>
+        <p class="body mt-24">
+          専用アプリで、湿度や運転スケジュールを管理できます。
+          外出先から確認したり、帰宅に合わせて運転を開始したりすることも可能です。
+        </p>
+        <ul class="app__list">
+          <li>現在の湿度をスマホで確認できる</li>
+          <li>運転スケジュールを設定できる</li>
+          <li>外出先からの操作にも対応</li>
+        </ul>
+      </div>
+
+      <div class="app__shots reveal">
+        <picture>
+          <source type="image/webp" srcset="../public/images/product-white-640.webp"
+                  sizes="(max-width: 767px) 56vw, (max-width: 1023px) 246px, 27vw">
+          <img src="../public/images/product-white-640.jpg"
+               sizes="(max-width: 767px) 56vw, (max-width: 1023px) 246px, 27vw"
+               alt="NAGI本体。ディープグリーンの円筒形で、上部からミストが出ている"
+               width="640" height="853" loading="lazy" decoding="async">
+        </picture>
+        <picture>
+          <source type="image/webp" srcset="../public/images/app-screen-480.webp"
+                  sizes="(max-width: 767px) 41vw, (max-width: 1023px) 181px, 20vw">
+          <img src="../public/images/app-screen-480.jpg"
+               sizes="(max-width: 767px) 41vw, (max-width: 1023px) 181px, 20vw"
+               alt="NAGI専用アプリの画面。現在の湿度52%、自動運転オン、おやすみモード、フィルター残量が表示されている"
+               width="480" height="853" loading="lazy" decoding="async">
+        </picture>
+      </div>
+    </div>
+  </section>
+
+  <!-- =====================================================================
+       6. 生活空間での使用シーン（解決策の理解④）
+       ===================================================================== -->
+  <section class="sec sec--beige" aria-labelledby="scene-title">
+    <div class="container">
+      <div class="sec__head reveal">
+        <p class="eyebrow">部屋に置いたときの佇まい</p>
+        <h2 class="h2 mt-16" id="scene-title">置いているだけで、部屋が整う。</h2>
+        <p class="lead mt-16">在宅ワークのデスクにも、自然に馴染みます。</p>
+        <p class="body mt-24">
+          NAGIは、家電らしさを感じさせない佇まいを目指してつくりました。
+          デスクの上に置いても、インテリアの一部として馴染みます。
+        </p>
+      </div>
+
+      <figure class="scene__figure reveal">
+        <picture>
+          <source type="image/webp"
+                  srcset="../public/images/lifestyle-640.webp 640w,
+                          ../public/images/lifestyle-1024.webp 1024w,
+                          ../public/images/lifestyle-1536.webp 1536w"
+                  sizes="(max-width: 767px) 100vw, (max-width: 1279px) 92vw, 1076px">
+          <img src="../public/images/lifestyle-1024.jpg"
+               srcset="../public/images/lifestyle-640.jpg 640w,
+                       ../public/images/lifestyle-1024.jpg 1024w,
+                       ../public/images/lifestyle-1536.jpg 1536w"
+               sizes="(max-width: 767px) 100vw, (max-width: 1279px) 92vw, 1076px"
+               alt="木製デスクの上に置かれたNAGI。ノートパソコンとマグカップ、観葉植物が並ぶ在宅ワークの一場面"
+               width="1536" height="1024" loading="lazy" decoding="async">
+        </picture>
+        <figcaption class="cap scene__cap">在宅ワークのデスクにも、家電らしさを感じさせず馴染みます。</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- =====================================================================
+       7. 選ばれる理由・実績（信頼）
+       ===================================================================== -->
+  <section class="sec" aria-labelledby="reason-title">
     <div class="container reason__grid">
       <div class="reveal">
         <p class="eyebrow">選ばれている理由</p>
-        <h2 class="h2" id="reason-title" style="margin-top:var(--sp-16)">512名が、先に選んだ理由。</h2>
-        <p class="lead reason__lead">クラウドファンディングからはじまりました。</p>
-        <p class="body reason__body">
+        <h2 class="h2 mt-16" id="reason-title">512名が、先に選んだ理由。</h2>
+        <p class="lead mt-16">クラウドファンディングからはじまりました。</p>
+        <p class="body mt-24">
           NAGIは、クラウドファンディングで512名の方に支援していただき、開発を進めてきました。
           プロダクトデザイナーを中心としたチームが、「置いて美しい」という視点で設計しています。
         </p>
@@ -377,42 +801,216 @@ img { max-width: 100%; height: auto; display: block; }
             <dd class="stat__value">8,942,000<span class="stat__unit">円</span></dd>
           </div>
         </dl>
-        <p class="cap stats__source">出典：クラウドファンディング公式ページ（掲載許可の確認後にキャプチャを掲載）</p>
+        <p class="cap mt-16">出典：クラウドファンディング公式ページ</p>
       </div>
 
-      <figure class="reason__figure reveal">
-        <img src="../assets/original/nagi_lifestyle_01.png"
-             alt="木製デスクの上に置かれたNAGI。ノートパソコンとマグカップ、観葉植物が並ぶ在宅ワークの一場面"
-             width="1536" height="1024">
-        <figcaption class="cap reason__figcap">
-          在宅ワークのデスクにも、家電らしさを感じさせず馴染みます。
-        </figcaption>
-      </figure>
+      <!-- ===================================================================
+           TODO［公開前に必須］クラウドファンディング公式ページのキャプチャ画像。
+
+           これは実績の「証拠」画像であり、他の画像で代用してはならない。
+           掲載許可の確認後、実物のキャプチャに必ず差し替えること。
+           差し替えるまでこのセクションの実績数値は出典を示せていない状態になる。
+           （docs/02_strategy.md §5、docs/06_copy.md 確認事項No.1 を参照）
+           =================================================================== -->
+      <div class="reveal">
+        <div class="ph ph--4x3">
+          <span class="ph__label">クラウドファンディング公式ページのキャプチャ</span>
+          <span class="ph__note">
+            支援者512名・支援総額8,942,000円の根拠画像<br>
+            掲載許可の確認後、実物に差し替え（公開前に必須）<br>
+            推奨比率 4:3
+          </span>
+        </div>
+        <p class="cap mt-16">実績数値の出典として、公式ページのキャプチャを掲載予定です。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA③ 信頼情報後 -->
+  <div class="cta-band">
+    <div class="container">
+      <a href="#" class="btn btn--primary">NAGIを購入する</a>
+      <p class="cta-band__sub">30日間の返品保証つき</p>
+    </div>
+  </div>
+
+  <!-- =====================================================================
+       8. よくある質問（不安解消①）
+       ===================================================================== -->
+  <section class="sec" aria-labelledby="faq-title">
+    <div class="container">
+      <div class="sec__head reveal">
+        <p class="eyebrow">よくある質問</p>
+        <h2 class="h2 mt-16" id="faq-title">気になることは、先にお答えします。</h2>
+        <p class="lead mt-16">購入前に知っておきたいこと。</p>
+      </div>
+
+      <div class="faq reveal">
+        <details class="faq__item">
+          <summary class="faq__q">電気代の目安は？</summary>
+          <p class="faq__a">標準運転で1時間あたり約0.3円です。1日8時間の使用で、月額の目安は約72円になります。</p>
+        </details>
+        <details class="faq__item">
+          <summary class="faq__q">フィルター交換の頻度は？</summary>
+          <p class="faq__a">目安として2〜3ヶ月に1回です（使用状況により変動します）。交換用フィルターは2個同梱しています。</p>
+        </details>
+        <details class="faq__item">
+          <summary class="faq__q">Wi-Fiがない環境でも使えますか？</summary>
+          <p class="faq__a">手動での加湿機能は使用できますが、アプリ連携機能は利用できません。アプリを使う場合は2.4GHz帯のWi-Fi環境が必要です。</p>
+        </details>
+        <details class="faq__item">
+          <summary class="faq__q">どのくらいの広さの部屋に向いていますか？</summary>
+          <p class="faq__a">目安は〜12畳です。15畳を超える部屋では、加湿力が不足する場合があります。</p>
+        </details>
+      </div>
     </div>
   </section>
 
   <!-- =====================================================================
-       3. CTA（行動）
+       9. 保証・スペック（不安解消②）
        ===================================================================== -->
-  <section class="cta" aria-labelledby="cta-title">
+  <section class="sec sec--beige" aria-labelledby="spec-title">
     <div class="container">
-      <h2 class="h2" id="cta-title">今日から、部屋の空気を変える。</h2>
-      <p class="lead cta__lead">NAGIと、心地よい湿度を。</p>
-      <p class="body cta__body" style="max-width:32em">
+      <div class="sec__head reveal">
+        <p class="eyebrow">保証とスペック</p>
+        <h2 class="h2 mt-16" id="spec-title">安心して、試していただくために。</h2>
+        <p class="lead mt-16">万が一のときも、サポートします。</p>
+        <p class="body mt-24">
+          NAGIには、購入後30日間の返品保証と、1年間のメーカー保証がついています。
+          水がなくなったときや満水になったときは自動で運転を止めるため、
+          つけっぱなしでも安心してお使いいただけます。
+        </p>
+      </div>
+
+      <ul class="guarantees reveal" style="list-style:none">
+        <li class="guarantee"><p class="guarantee__t"><span class="nb">購入後30日間の</span><span class="nb">返品保証</span></p></li>
+        <li class="guarantee"><p class="guarantee__t">1年間のメーカー保証</p></li>
+        <li class="guarantee"><p class="guarantee__t"><span class="nb">満水・空焚きになると</span><span class="nb">自動で止まる安全設計</span></p></li>
+      </ul>
+
+      <h3 class="h3 mt-48">スペック</h3>
+      <table class="spec">
+        <caption class="visually-hidden">NAGI スマート加湿器の仕様一覧</caption>
+        <tbody>
+          <tr><th scope="row">サイズ</th><td>W140 × D140 × H280 mm</td></tr>
+          <tr><th scope="row">重量</th><td>約1.1kg（水を入れない状態）</td></tr>
+          <tr><th scope="row">タンク容量</th><td>2.5L（満水で約20時間連続運転）</td></tr>
+          <tr><th scope="row">加湿方式</th><td>超音波式</td></tr>
+          <tr><th scope="row">適用畳数</th><td>〜12畳（15畳以上は加湿力が不足する場合があります）</td></tr>
+          <tr><th scope="row">静音性</th><td>20dB以下（最小運転時）</td></tr>
+          <tr><th scope="row">安全機能</th><td>満水検知・空焚き防止による自動停止</td></tr>
+          <tr><th scope="row">対応通信</th><td>Wi-Fi 2.4GHz帯</td></tr>
+          <tr><th scope="row">対応アプリ</th><td>iOS 15以降／Android 11以降</td></tr>
+          <tr><th scope="row">カラー</th><td>ミストグレー／ディープグリーン／サンドベージュ</td></tr>
+          <tr><th scope="row">同梱物</th><td>本体、替えフィルター2個、電源アダプター、簡易説明書</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- =====================================================================
+       10. 最終CTA（行動）／ CTA④
+       ===================================================================== -->
+  <section class="sec sec--lg sec--key final" aria-labelledby="final-title">
+    <div class="container">
+      <h2 class="h2" id="final-title">今日から、部屋の空気を変える。</h2>
+      <p class="lead final__lead mt-16">NAGIと、心地よい湿度を。</p>
+      <p class="body final__body mt-24">
         価格は12,800円（税込）、送料800円です。
         30日間の返品保証もありますので、まずは試してみてください。
       </p>
 
-      <p class="cta__action">
+      <p class="mt-48">
         <a href="#" class="btn btn--onkey">NAGIを購入する</a>
       </p>
-      <p class="cta__sub">遷移先：自社ECサイト（Shopify）商品購入ページ</p>
+      <p class="final__sub">遷移先：自社ECサイト（Shopify）商品購入ページ</p>
 
-      <a href="#" class="cta__link">ご不明な点はこちらからお問い合わせください</a>
+      <a href="#contact" class="final__link">ご不明な点はこちらからお問い合わせください</a>
+    </div>
+  </section>
+
+  <!-- =====================================================================
+       問い合わせフォーム（購入に進めない人の受け皿）
+       ===================================================================== -->
+  <section class="sec" id="contact" aria-labelledby="contact-title">
+    <div class="container container--narrow">
+      <div class="sec__head reveal">
+        <p class="eyebrow">お問い合わせ</p>
+        <h2 class="h2 mt-16" id="contact-title">ご不明な点はこちらから</h2>
+        <p class="body mt-24">
+          商品や配送についてのご質問にお答えします。
+          2営業日以内に、ご記入いただいたメールアドレス宛にご返信します。
+        </p>
+      </div>
+
+      <!-- TODO［バックエンド未接続］送信先 support@nagilab.co.jp。
+           Shopify のフォームエンドポイント（例：/contact#contact_form）へ
+           action と各 name 属性を差し替えること。現状はクライアント側の
+           入力チェックと完了表示のみで、送信は行われない。 -->
+      <form class="form reveal" id="contact-form" novalidate
+            action="#" method="post" aria-describedby="form-note">
+        <div class="field">
+          <label class="field__label" for="f-name">お名前<span class="field__req">必須</span></label>
+          <input class="field__input" type="text" id="f-name" name="name"
+                 autocomplete="name" required aria-describedby="f-name-error">
+          <p class="field__error" id="f-name-error" hidden></p>
+        </div>
+
+        <div class="field">
+          <label class="field__label" for="f-email">メールアドレス<span class="field__req">必須</span></label>
+          <input class="field__input" type="email" id="f-email" name="email"
+                 autocomplete="email" inputmode="email" required
+                 aria-describedby="f-email-hint f-email-error">
+          <p class="field__hint" id="f-email-hint">例：nagi@example.com</p>
+          <p class="field__error" id="f-email-error" hidden></p>
+        </div>
+
+        <div class="field">
+          <label class="field__label" for="f-body">お問い合わせ内容<span class="field__opt">任意</span></label>
+          <textarea class="field__area" id="f-body" name="message"
+                    aria-describedby="f-body-hint"></textarea>
+          <p class="field__hint" id="f-body-hint">ご質問の内容をご記入ください。</p>
+        </div>
+
+        <p class="form__note" id="form-note">
+          ご入力いただいた個人情報は、お問い合わせへの返信のみに使用します。
+          詳しくは<a href="#">個人情報保護方針</a>をご確認ください。送信によって費用は発生しません。
+        </p>
+
+        <p class="form__submit">
+          <button type="submit" class="btn btn--ghost">送信する</button>
+        </p>
+      </form>
+
+      <div class="form__done" id="form-done" hidden role="status" tabindex="-1">
+        <p><strong>お問い合わせを受け付けました。</strong></p>
+        <p class="cap">
+          ご記入のメールアドレス宛に受付完了メールをお送りしました。
+          2営業日以内に担当者よりご返信します。届かない場合は迷惑メールフォルダをご確認ください。
+        </p>
+      </div>
     </div>
   </section>
 
 </main>
+
+<footer class="foot">
+  <div class="container">
+    <p class="foot__logo">NAGI</p>
+    <ul class="foot__links">
+      <li><a href="#">特定商取引法に基づく表記</a></li>
+      <li><a href="#">個人情報保護方針</a></li>
+      <li><a href="#">会社概要</a></li>
+      <li><a href="#contact">お問い合わせ</a></li>
+    </ul>
+    <div class="foot__meta">
+      <p>株式会社Nagi Lab　東京都渋谷区渋谷2-XX-XX ○○ビル3F</p>
+      <!-- TODO［確定値待ち］PSEマーク等の法定表示。認証番号・表記文言は納品前に確定が必要 -->
+      <p>本製品は電気用品安全法に基づく表示を行っています（認証番号は確定後に記載）。</p>
+      <p>&copy; 2026 Nagi Lab Inc.</p>
+    </div>
+  </div>
+</footer>
 
 <!-- スマホ固定CTA -->
 <div class="sticky" id="sticky" aria-hidden="true">
@@ -421,37 +1019,96 @@ img { max-width: 100%; height: auto; display: block; }
 
 <script>
 (function () {
+  'use strict';
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  /* スクロールで要素を控えめにフェードイン */
+  /* --- スクロールで要素を控えめにフェードイン --- */
+  var revealEls = document.querySelectorAll('.reveal');
   if (!reduce && 'IntersectionObserver' in window) {
     var io = new IntersectionObserver(function (entries) {
       entries.forEach(function (e) {
         if (e.isIntersecting) { e.target.classList.add('is-in'); io.unobserve(e.target); }
       });
-    }, { rootMargin: '0px 0px -12% 0px' });
-    document.querySelectorAll('.reveal').forEach(function (el) { io.observe(el); });
+    }, { rootMargin: '0px 0px -10% 0px' });
+    revealEls.forEach(function (el) { io.observe(el); });
   } else {
-    document.querySelectorAll('.reveal').forEach(function (el) { el.classList.add('is-in'); });
+    revealEls.forEach(function (el) { el.classList.add('is-in'); });
   }
 
-  /* スマホ固定CTA：ファーストビューを抜けてから表示する */
+  /* --- スマホ固定CTA：ファーストビューを抜けてから表示 --- */
   var sticky = document.getElementById('sticky');
   var fv = document.querySelector('.fv');
-  var link = sticky.querySelector('.btn');
+  var stickyLink = sticky.querySelector('.btn');
 
-  function isPhone() { return window.matchMedia('(max-width: 767px)').matches; }
-
-  function update() {
-    var show = isPhone() && (window.scrollY > fv.offsetHeight * 0.8);
+  function updateSticky() {
+    var show = window.matchMedia('(max-width: 767px)').matches &&
+               window.scrollY > fv.offsetHeight * 0.8;
     sticky.classList.toggle('is-visible', show);
     sticky.setAttribute('aria-hidden', String(!show));
-    link.setAttribute('tabindex', show ? '0' : '-1');
+    stickyLink.setAttribute('tabindex', show ? '0' : '-1');
+  }
+  window.addEventListener('scroll', updateSticky, { passive: true });
+  window.addEventListener('resize', updateSticky);
+  updateSticky();
+
+  /* --- 問い合わせフォームの入力チェック --- */
+  var form = document.getElementById('contact-form');
+  var done = document.getElementById('form-done');
+
+  var RULES = [
+    {
+      id: 'f-name',
+      check: function (v) { return v.trim() !== ''; },
+      message: 'お名前を入力してください。'
+    },
+    {
+      id: 'f-email',
+      check: function (v) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim()); },
+      message: 'メールアドレスを「nagi@example.com」の形式で入力してください。'
+    }
+  ];
+
+  function setError(rule, hasError) {
+    var input = document.getElementById(rule.id);
+    var box = document.getElementById(rule.id + '-error');
+    input.setAttribute('aria-invalid', String(hasError));
+    box.textContent = hasError ? rule.message : '';
+    box.hidden = !hasError;
   }
 
-  window.addEventListener('scroll', update, { passive: true });
-  window.addEventListener('resize', update);
-  update();
+  RULES.forEach(function (rule) {
+    var input = document.getElementById(rule.id);
+    /* 入力し直したらエラーはすぐ消す。入力途中では出さない */
+    input.addEventListener('input', function () {
+      if (input.getAttribute('aria-invalid') === 'true' && rule.check(input.value)) {
+        setError(rule, false);
+      }
+    });
+    input.addEventListener('blur', function () {
+      if (input.value !== '') setError(rule, !rule.check(input.value));
+    });
+  });
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    var firstBad = null;
+    RULES.forEach(function (rule) {
+      var input = document.getElementById(rule.id);
+      var bad = !rule.check(input.value);
+      setError(rule, bad);
+      if (bad && !firstBad) firstBad = input;
+    });
+
+    if (firstBad) { firstBad.focus(); return; }
+
+    /* バックエンド未接続のため、ここでは完了表示のみ行う。
+       Shopify のフォームへ接続する際は preventDefault を外し、
+       action と name 属性を差し替えること */
+    form.hidden = true;
+    done.hidden = false;
+    done.focus();
+  });
 })();
 </script>
 

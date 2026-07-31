@@ -4,7 +4,7 @@
 - **案件名**: スマート加湿器「NAGI（凪）」LP制作
 - **クライアント名**: 株式会社Nagi Lab
 - **LPの目的**: 購入促進（CTA:「NAGIを購入する」）
-- **現在工程**: 初期デザイン作成済み（STEP7｜FV・強み・CTAの3セクション）
+- **現在工程**: 全体実装済み（STEP8｜全10セクション＋問い合わせフォーム）
 
 ## フォルダ構成
 
@@ -29,14 +29,25 @@ nagi-lp/
 │   ├── original/                # 元素材（未加工）
 │   └── optimized/                # 最適化済み素材（書き出し後）
 ├── src/                          # 実装コード（HTML/CSS/JS はすべてここ）
-│   ├── index.html                #   LP本体
+│   ├── index.html                #   LP本体（全10セクション）
 │   ├── wireframe.html            #   ワイヤーフレーム
 │   └── preview/                  #   PC・スマホ確認用ビューア
 ├── public/
-│   └── images/                   # 公開用画像
+│   └── images/                   # 配信用画像（WebP＋JPEG）・OGP・favicon
 ├── qa/                           # QA・チェックリスト・テスト結果
 └── delivery/                     # 納品物
 ```
 
+## ローカルでの確認
+
+```bash
+cd nagi-lp
+python3 -m http.server 8000
+```
+
+- LP本体: http://localhost:8000/src/
+- ワイヤーフレーム: http://localhost:8000/src/wireframe.html
+
 ## 進め方
 詳細な工程・参照ルールは [CLAUDE.md](./CLAUDE.md) を参照してください。
+検査結果は [qa/step8_check.md](./qa/step8_check.md) にまとめています。
