@@ -1,0 +1,1685 @@
+<title>NAGI（凪）LP ワイヤーフレーム — STEP6 構成確認</title>
+<style>
+  /* ============================================================
+     ビューアのクローム。
+     ワイヤーフレーム本体（枠内）はグレースケールのまま触らない。
+     周囲は静かに引き、白い枠が主役になるようにする。
+     ============================================================ */
+  :root {
+    --ink:      #14181a;   /* 文字（わずかに青緑に寄せた黒） */
+    --ground:   #f4f5f5;   /* 地 */
+    --panel:    #ffffff;   /* パネル */
+    --line:     #dfe2e2;   /* 罫 */
+    --muted:    #6d7679;   /* 補助文字 */
+    --accent:   #35594c;   /* 選択状態のみ。凪のディープグリーンを彩度を落として引用 */
+    --accent-fg:#ffffff;
+    --shadow:   0 1px 2px rgba(20,24,26,.06), 0 8px 24px rgba(20,24,26,.06);
+
+    --frame-h:  880px;
+    --pc-w:     1440px;
+    --sp-w:     390px;
+    --scale:    .58;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --ink:    #e6e9e9;
+      --ground: #14181a;
+      --panel:  #1b2124;
+      --line:   #2b3236;
+      --muted:  #8b9599;
+      --accent: #7fa896;
+      --accent-fg: #0f1416;
+      --shadow: 0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.32);
+    }
+  }
+  :root[data-theme="dark"] {
+    --ink:    #e6e9e9;
+    --ground: #14181a;
+    --panel:  #1b2124;
+    --line:   #2b3236;
+    --muted:  #8b9599;
+    --accent: #7fa896;
+    --accent-fg: #0f1416;
+    --shadow: 0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.32);
+  }
+  :root[data-theme="light"] {
+    --ink:      #14181a;
+    --ground:   #f4f5f5;
+    --panel:    #ffffff;
+    --line:     #dfe2e2;
+    --muted:    #6d7679;
+    --accent:   #35594c;
+    --accent-fg:#ffffff;
+    --shadow:   0 1px 2px rgba(20,24,26,.06), 0 8px 24px rgba(20,24,26,.06);
+  }
+
+  .wfv, .wfv *, .wfv *::before, .wfv *::after { box-sizing: border-box; }
+
+  .wfv {
+    background: var(--ground);
+    color: var(--ink);
+    font-family: 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', 'Noto Sans JP',
+                 system-ui, -apple-system, sans-serif;
+    line-height: 1.7;
+    min-height: 100vh;
+    padding: 32px 24px 56px;
+  }
+
+  .wfv__inner { max-width: 1640px; margin-inline: auto; display: flex; flex-direction: column; gap: 24px; }
+
+  /* ---------- 見出し ---------- */
+  .wfv__eyebrow {
+    font-size: 11px; letter-spacing: .16em; text-transform: uppercase;
+    color: var(--muted); font-weight: 600;
+  }
+  .wfv__title {
+    font-size: clamp(22px, 3vw, 30px); line-height: 1.25; font-weight: 700;
+    text-wrap: balance; margin-top: 6px;
+  }
+  .wfv__meta { font-size: 13px; color: var(--muted); margin-top: 6px; }
+
+  .wfv__notice {
+    display: flex; gap: 12px; align-items: flex-start;
+    padding: 14px 16px; border-radius: 8px;
+    background: var(--panel); border: 1px solid var(--line);
+    font-size: 13px; color: var(--muted); box-shadow: var(--shadow);
+  }
+  .wfv__notice strong { color: var(--ink); }
+  .wfv__notice::before {
+    content: ""; flex: 0 0 3px; align-self: stretch;
+    background: var(--accent); border-radius: 2px;
+  }
+
+  /* ---------- 操作バー ---------- */
+  .wfv__bar {
+    display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
+    padding: 10px; border-radius: 10px;
+    background: var(--panel); border: 1px solid var(--line);
+    box-shadow: var(--shadow);
+  }
+  .wfv__btn {
+    padding: 7px 14px; border-radius: 6px;
+    background: transparent; color: var(--ink);
+    border: 1px solid var(--line);
+    font: inherit; font-size: 13px; cursor: pointer;
+    transition: background .15s ease, border-color .15s ease;
+  }
+  .wfv__btn:hover { border-color: var(--muted); }
+  .wfv__btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .wfv__btn[aria-pressed="true"] {
+    background: var(--accent); color: var(--accent-fg);
+    border-color: var(--accent); font-weight: 700;
+  }
+  .wfv__div { width: 1px; align-self: stretch; background: var(--line); margin-inline: 4px; }
+  .wfv__hint { margin-left: auto; font-size: 12px; color: var(--muted); }
+
+  /* ---------- 凡例 ---------- */
+  .wfv__legend {
+    display: flex; flex-wrap: wrap; gap: 8px 22px;
+    padding: 12px 16px; border-radius: 10px;
+    background: var(--panel); border: 1px solid var(--line);
+    font-size: 12px; color: var(--muted); box-shadow: var(--shadow);
+  }
+  .wfv__legend span.k { display: inline-flex; align-items: center; gap: 8px; }
+  .sw { width: 26px; height: 15px; border-radius: 3px; flex: none; }
+  .sw--p1 { background: #4a4a4a; }
+  .sw--p2 { background: #c4c4c4; }
+  .sw--p3 { background: transparent; border: 1px solid #9a9a9a; }
+  .sw--img {
+    background: repeating-linear-gradient(45deg,#f7f7f7,#f7f7f7 5px,#e6e6e6 5px,#e6e6e6 10px);
+    border: 2px dashed #c4c4c4;
+  }
+
+  /* ---------- ステージ ---------- */
+  .wfv__stage {
+    display: flex; flex-wrap: wrap; gap: 28px; justify-content: center;
+    margin-top: 8px;
+  }
+  .wfv__stage[data-view="pc"] .dev--sp { display: none; }
+  .wfv__stage[data-view="sp"] .dev--pc { display: none; }
+
+  .dev { display: flex; flex-direction: column; gap: 8px; }
+  .dev__cap { display: flex; align-items: baseline; gap: 8px; font-size: 13px; font-weight: 700; }
+  .dev__dim { font-weight: 400; font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+
+  .dev__screen {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+  }
+  .dev--pc .dev__screen { width: calc(var(--pc-w) * var(--scale)); height: var(--frame-h); }
+  .dev--pc iframe {
+    width: var(--pc-w); height: calc(var(--frame-h) / var(--scale));
+    transform: scale(var(--scale)); transform-origin: 0 0; border: 0; display: block;
+  }
+  .dev--sp .dev__screen { width: var(--sp-w); height: var(--frame-h); }
+  .dev--sp iframe { width: var(--sp-w); height: var(--frame-h); border: 0; display: block; }
+
+  .wfv__foot {
+    padding-top: 18px; border-top: 1px solid var(--line);
+    font-size: 12px; color: var(--muted);
+    display: flex; flex-direction: column; gap: 4px;
+  }
+
+  @media (max-width: 860px) {
+    .wfv { padding: 20px 14px 40px; }
+    .wfv__hint { margin-left: 0; width: 100%; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .wfv__btn { transition: none; }
+  }
+</style>
+
+<div class="wfv">
+  <div class="wfv__inner">
+
+    <header>
+      <p class="wfv__eyebrow">STEP 6 &middot; Wireframe</p>
+      <h1 class="wfv__title">NAGI（凪）スマート加湿器 LP ／ ワイヤーフレーム</h1>
+      <p class="wfv__meta">株式会社Nagi Lab ｜ 元資料：docs/01〜06、rules/common-design-rules.md</p>
+    </header>
+
+    <p class="wfv__notice">
+      <span>
+        <strong>これは本番デザインではありません。</strong>
+        セクション順・情報の優先順位・文章量・CTA位置・画像の必要箇所・スマホでの読みやすさを
+        確認するためのローファイ版です。配色とフォントは次工程で設計します。
+      </span>
+    </p>
+
+    <div class="wfv__bar">
+      <button class="wfv__btn" data-view="both" aria-pressed="true">並べて表示</button>
+      <button class="wfv__btn" data-view="pc" aria-pressed="false">PCのみ</button>
+      <button class="wfv__btn" data-view="sp" aria-pressed="false">スマホのみ</button>
+      <span class="wfv__div"></span>
+      <button class="wfv__btn" id="wfv-anno" aria-pressed="true">注釈を表示中</button>
+      <span class="wfv__div"></span>
+      <button class="wfv__btn" id="wfv-out">PC縮小 −</button>
+      <button class="wfv__btn" id="wfv-in">PC拡大 ＋</button>
+      <span class="wfv__hint">各フレーム内は個別にスクロールできます</span>
+    </div>
+
+    <div class="wfv__legend">
+      <span class="k"><i class="sw sw--p1"></i>最重要（主訴求・CTA）</span>
+      <span class="k"><i class="sw sw--p2"></i>重要（見出し・実績）</span>
+      <span class="k"><i class="sw sw--p3"></i>補足（説明・条件・FAQ）</span>
+      <span class="k"><i class="sw sw--img"></i>画像プレースホルダ</span>
+      <span class="k">破線タグ＝クライアント確認待ちの数値・表現</span>
+    </div>
+
+    <div class="wfv__stage" data-view="both" id="wfv-stage">
+      <div class="dev dev--pc">
+        <p class="dev__cap">PC版 <span class="dev__dim">1440px 幅／縮小表示</span></p>
+        <div class="dev__screen">
+          <iframe srcdoc="<!DOCTYPE html>
+<html lang=&quot;ja&quot;>
+<head>
+<meta charset=&quot;UTF-8&quot;>
+<meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;>
+<title>NAGI LP ワイヤーフレーム</title>
+<style>
+  /* ==========================================================
+     NAGI LP ワイヤーフレーム
+     ローファイ（グレースケール）。本番デザインではありません。
+     数値は docs/04_design-system.md 準拠
+     ========================================================== */
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --c-bg:        #ffffff;
+    --c-surface:   #f7f7f7;
+    --c-line:      #e3e3e3;
+    --c-line-mid:  #c4c4c4;
+    --c-muted:     #9a9a9a;
+    --c-text:      #333333;
+    --c-solid:     #4a4a4a;
+
+    /* 余白スケール（4/8/12/16/24/32/48/64/96px のみ） */
+    --sp-4: 4px;  --sp-8: 8px;   --sp-12: 12px; --sp-16: 16px;
+    --sp-24: 24px; --sp-32: 32px; --sp-48: 48px; --sp-64: 64px; --sp-96: 96px;
+
+    --container: 1140px;
+    --sec-pad: var(--sp-96);      /* セクション余白 標準（PC） */
+    --sec-pad-strong: 140px;      /* セクション余白 強調（PC） */
+  }
+
+  html { -webkit-text-size-adjust: 100%; }
+
+  body {
+    font-family: 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', sans-serif;
+    background: var(--c-bg);
+    color: var(--c-text);
+    line-height: 1.8;
+    overflow-x: hidden;
+  }
+
+  .container {
+    width: 100%;
+    max-width: var(--container);
+    margin-inline: auto;
+    padding-inline: var(--sp-32);
+  }
+
+  /* ---------- セクション ---------- */
+  .sec { padding-block: var(--sec-pad); border-bottom: 1px dashed var(--c-line); }
+  .sec--strong { padding-block: var(--sec-pad-strong); }
+  .sec--alt { background: var(--c-surface); }
+
+  /* ---------- 注釈（表示ON/OFF可） ---------- */
+  .anno {
+    display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-8);
+    margin-bottom: var(--sp-32);
+    padding: var(--sp-8) var(--sp-12);
+    background: var(--c-surface);
+    border-left: 4px solid var(--c-line-mid);
+    font-size: 12px; line-height: 1.6; color: var(--c-muted);
+  }
+  .anno__num {
+    display: inline-flex; align-items: center; justify-content: center;
+    min-width: 24px; height: 24px; padding-inline: var(--sp-4);
+    background: var(--c-solid); color: #fff;
+    border-radius: 4px; font-weight: 700; font-size: 12px;
+  }
+  .anno__name { font-weight: 700; color: var(--c-text); font-size: 13px; }
+  .anno__tag {
+    padding: 2px var(--sp-8);
+    border: 1px solid var(--c-line-mid); border-radius: 999px;
+    font-size: 11px; white-space: nowrap;
+  }
+  .anno__tag--p1 { background: var(--c-solid); color: #fff; border-color: var(--c-solid); }
+  .anno__tag--p2 { background: var(--c-line-mid); color: #fff; border-color: var(--c-line-mid); }
+  .anno__tag--p3 { background: transparent; color: var(--c-muted); }
+  .anno__count { margin-left: auto; font-variant-numeric: tabular-nums; font-size: 11px; }
+
+  /* 注釈OFF時 */
+  body.no-anno .anno { display: none; }
+  body.no-anno .ph__meta { display: none; }
+
+  /* ---------- 見出し・本文 ---------- */
+  .h1 { font-size: 56px; line-height: 1.2; font-weight: 700; letter-spacing: .01em; }
+  .h2 { font-size: 36px; line-height: 1.3; font-weight: 700; }
+  .h3 { font-size: 22px; line-height: 1.4; font-weight: 500; }
+  .lead { font-size: 18px; color: var(--c-muted); margin-top: var(--sp-16); }
+  .body { font-size: 16px; margin-top: var(--sp-24); max-width: 46em; }
+  .cap  { font-size: 13px; color: var(--c-muted); }
+
+  .list { margin-top: var(--sp-24); padding-left: 1.4em; max-width: 46em; }
+  .list li { font-size: 16px; margin-bottom: var(--sp-8); }
+
+  /* ---------- 画像プレースホルダ ---------- */
+  .ph {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: var(--sp-8);
+    border: 2px dashed var(--c-line-mid);
+    background: repeating-linear-gradient(
+      45deg, var(--c-surface), var(--c-surface) 10px, #f0f0f0 10px, #f0f0f0 20px
+    );
+    color: var(--c-muted);
+    text-align: center;
+    padding: var(--sp-24);
+  }
+  .ph__label { font-size: 14px; font-weight: 700; color: var(--c-text); }
+  .ph__meta  { font-size: 11px; line-height: 1.6; }
+  .ph--16x9 { aspect-ratio: 16 / 9; }
+  .ph--4x3  { aspect-ratio: 4 / 3; }
+  .ph--1x1  { aspect-ratio: 1 / 1; }
+  .ph--3x4  { aspect-ratio: 3 / 4; }
+  /* 特徴カード内のアイコン枠（文字が折り返さない最小サイズ） */
+  .ph--icon {
+    width: 56px; height: 56px; padding: var(--sp-4);
+    margin-bottom: var(--sp-16); border-width: 1px;
+    font-size: 9px; line-height: 1.2;
+  }
+  .ph--icon .ph__meta { font-size: 9px; white-space: nowrap; }
+
+  /* ---------- CTA ---------- */
+  .cta { margin-top: var(--sp-32); }
+  .cta__btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    min-height: 52px; padding: var(--sp-12) var(--sp-32);
+    background: var(--c-solid); color: #fff;
+    border-radius: 6px;
+    font-size: 17px; font-weight: 700; text-decoration: none;
+  }
+  .cta__sub { margin-top: var(--sp-8); font-size: 13px; color: var(--c-muted); }
+
+  /* CTA帯（セクション間の節目に置く独立CTA） */
+  .cta-band {
+    padding-block: var(--sp-64);
+    background: var(--c-surface);
+    border-block: 1px solid var(--c-line);
+    text-align: center;
+  }
+  .cta-band .anno { justify-content: center; text-align: left; }
+
+  /* ---------- レイアウトパターン ---------- */
+  /* テキスト列を広めに取り、H1が意図しない位置で折り返さないようにする
+     （ルールブック PART6-4「1文字だけ次行へ残る状態を避ける」） */
+  .hero { display: grid; grid-template-columns: 1.15fr .85fr; gap: var(--sp-48); align-items: center; }
+
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--sp-32); margin-top: var(--sp-48); }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-48); align-items: center; margin-top: var(--sp-48); }
+
+  .card {
+    padding: var(--sp-24);
+    border: 1px solid var(--c-line);
+    background: var(--c-bg);
+    border-radius: 8px;
+  }
+  .card__n { font-size: 12px; color: var(--c-muted); }
+  .card__t { font-size: 17px; font-weight: 700; margin-top: var(--sp-4); line-height: 1.5; }
+
+  /* FAQ */
+  .faq { margin-top: var(--sp-48); max-width: 46em; }
+  .faq__item { padding-block: var(--sp-24); border-bottom: 1px solid var(--c-line); }
+  .faq__q { font-size: 17px; font-weight: 700; }
+  .faq__a { font-size: 15px; margin-top: var(--sp-8); color: #555; }
+
+  /* スペック表 */
+  .spec { width: 100%; margin-top: var(--sp-32); border-collapse: collapse; font-size: 15px; }
+  .spec th, .spec td { padding: var(--sp-12) var(--sp-16); border-bottom: 1px solid var(--c-line); text-align: left; }
+  .spec th { width: 34%; font-weight: 700; background: var(--c-surface); white-space: nowrap; }
+
+  /* フォーム */
+  .form { margin-top: var(--sp-32); max-width: 480px; }
+  .form__row { margin-bottom: var(--sp-16); }
+  .form__label { display: block; font-size: 13px; font-weight: 700; margin-bottom: var(--sp-4); }
+  .form__req { color: var(--c-muted); font-weight: 400; }
+  .form__box { height: 44px; border: 1px solid var(--c-line-mid); border-radius: 4px; background: var(--c-surface); }
+  .form__box--area { height: 96px; }
+
+  /* 未確定マーカー */
+  .todo {
+    display: inline-block; padding: 1px var(--sp-8); margin-left: var(--sp-4);
+    border: 1px dashed var(--c-line-mid); border-radius: 4px;
+    font-size: 11px; color: var(--c-muted); white-space: nowrap;
+  }
+  body.no-anno .todo { display: none; }
+
+  /* フッター */
+  .foot { padding-block: var(--sp-48); background: var(--c-solid); color: #fff; font-size: 13px; }
+  .foot ul { list-style: none; display: flex; flex-wrap: wrap; gap: var(--sp-24); margin-top: var(--sp-16); }
+
+  /* SP固定CTA（スマホのみ表示） */
+  .sticky {
+    display: none;
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 50;
+    padding: var(--sp-12) var(--sp-16);
+    background: rgba(255,255,255,.96);
+    border-top: 1px solid var(--c-line);
+  }
+  .sticky .cta__btn { width: 100%; }
+  .sticky__note { font-size: 10px; color: var(--c-muted); text-align: center; margin-top: var(--sp-4); }
+
+  /* ==========================================================
+     タブレット 768〜1023px
+     ========================================================== */
+  @media (max-width: 1023px) {
+    :root { --sec-pad: 72px; --sec-pad-strong: 104px; }
+    .container { padding-inline: var(--sp-24); }
+    .hero { grid-template-columns: 1fr; gap: var(--sp-48); }
+    .grid-3 { grid-template-columns: 1fr 1fr; }
+    .h1 { font-size: 44px; }
+    .h2 { font-size: 32px; }
+  }
+
+  /* ==========================================================
+     スマートフォン 〜767px
+     ========================================================== */
+  @media (max-width: 767px) {
+    :root { --sec-pad: var(--sp-64); --sec-pad-strong: 80px; }
+
+    body { line-height: 1.7; padding-bottom: 88px; } /* 固定CTA分の余白 */
+
+    .container { padding-inline: var(--sp-16); }
+
+    .h1 { font-size: 36px; line-height: 1.25; }
+    .h2 { font-size: 26px; }
+    .h3 { font-size: 18px; }
+    .lead { font-size: 16px; margin-top: var(--sp-12); }
+    .body { font-size: 15px; margin-top: var(--sp-16); }
+    .list li { font-size: 15px; }
+
+    .hero, .grid-2 { grid-template-columns: 1fr; gap: var(--sp-32); }
+    .grid-3 { grid-template-columns: 1fr; gap: var(--sp-16); margin-top: var(--sp-32); }
+
+    .cta__btn { width: 100%; font-size: 16px; }
+    .cta-band { padding-block: var(--sp-48); }
+
+    .anno { margin-bottom: var(--sp-24); }
+    .anno__count { margin-left: 0; width: 100%; }
+
+    /* スペック表はカード型に組み替え（横スクロールを出さない） */
+    .spec, .spec tbody, .spec tr, .spec th, .spec td { display: block; width: 100%; }
+    .spec tr { border-bottom: 1px solid var(--c-line); padding-block: var(--sp-8); }
+    .spec th { background: transparent; padding: 0 0 var(--sp-4); font-size: 13px; color: var(--c-muted); }
+    .spec td { padding: 0 0 var(--sp-8); border: 0; }
+
+    .sticky { display: block; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     セクション1：ヒーロー（興味）
+     ============================================================ -->
+<section class=&quot;sec sec--strong&quot;>
+  <div class=&quot;container&quot;>
+    <div class=&quot;anno&quot;>
+      <span class=&quot;anno__num&quot;>01</span>
+      <span class=&quot;anno__name&quot;>ヒーロー</span>
+      <span class=&quot;anno__tag&quot;>心理：興味</span>
+      <span class=&quot;anno__tag anno__tag--p1&quot;>最重要</span>
+      <span class=&quot;anno__tag&quot;>CTA① あり</span>
+      <span class=&quot;anno__count&quot;>見出し18字／本文62字</span>
+    </div>
+
+    <div class=&quot;hero&quot;>
+      <div>
+        <h1 class=&quot;h1&quot;>置いているだけで、<br>部屋が整う加湿器。</h1>
+        <p class=&quot;lead&quot;>デザインも、湿度管理も、あきらめない。</p>
+        <p class=&quot;body&quot;>NAGIは、見た目も使い勝手も妥協したくない人のための加湿器です。スマホひとつで湿度を管理でき、静かに部屋に溶け込みます。</p>
+
+        <div class=&quot;cta&quot;>
+          <a href=&quot;#&quot; class=&quot;cta__btn&quot;>NAGIを購入する（12,800円 税込）</a>
+          <p class=&quot;cta__sub&quot;>送料800円／30日間返品保証・1年間メーカー保証<span class=&quot;todo&quot;>価格は公開時に要最終確認</span></p>
+        </div>
+      </div>
+
+      <div class=&quot;ph ph--3x4&quot;>
+        <span class=&quot;ph__label&quot;>商品単体写真（白背景）</span>
+        <span class=&quot;ph__meta&quot;>斜め上からのアングル／推奨比率 3:4<br>現物あり：assets/original/nagi_product_white_01.png</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     セクション2：悩みの提示（共感）
+     ============================================================ -->
+<section class=&quot;sec sec--alt&quot;>
+  <div class=&quot;container&quot;>
+    <div class=&quot;anno&quot;>
+      <span class=&quot;anno__num&quot;>02</span>
+      <span class=&quot;anno__name&quot;>こんな悩みはありませんか</span>
+      <span class=&quot;anno__tag&quot;>心理：共感</span>
+      <span class=&quot;anno__tag anno__tag--p2&quot;>重要</span>
+      <span class=&quot;anno__tag&quot;>CTAなし</span>
+      <span class=&quot;anno__count&quot;>見出し24字／本文89字</span>
+    </div>
+
+    <h2 class=&quot;h2&quot;>加湿器を置きたいのに、置けない理由がある。</h2>
+    <p class=&quot;lead&quot;>なんとなく、後回しにしていませんか。</p>
+    <p class=&quot;body&quot;>空気が乾燥すると、喉や肌の調子が気になります。それでも加湿器を置かない人は多くいます。理由は「部屋に生活感が出てしまう」「手入れが面倒で続かない」という2つです。</p>
+
+    <div class=&quot;grid-3&quot;>
+      <div class=&quot;card&quot;><p class=&quot;card__n&quot;>01</p><p class=&quot;card__t&quot;>乾燥で喉や肌の<br>調子を崩しやすい</p></div>
+      <div class=&quot;card&quot;><p class=&quot;card__n&quot;>02</p><p class=&quot;card__t&quot;>加湿器のデザインが<br>部屋に馴染まない</p></div>
+      <div class=&quot;card&quot;><p class=&quot;card__n&quot;>03</p><p class=&quot;card__t&quot;>フィルター掃除が<br>面倒で続かない</p></div>
+    </div>
+
+    <div style=&quot;margin-top:var(--sp-48)&quot;>
+      <div class=&quot;ph ph--16x9&quot;>
+        <span class=&quot;ph__label&quot;>悩みを表現するイラストまたは写真</span>
+        <span class=&quot;ph__meta&quot;>人物を写さず雰囲気で伝える／推奨比率 16:9<br><strong>現物なし — 新規手配が必要</strong></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     セクション3：価値提案（解決策の理解①）
+     ============================================================ -->
+<section class=&quot;sec&quot;>
+  <div class=&quot;container&quot;>
+    <div class=&quot;anno&quot;>
+      <span class=&quot;anno__num&quot;>03</span>
+      <span class=&quot;anno__name&quot;>NAGIが解決すること</span>
+      <span class=&quot;anno__tag&quot;>心理：解決策の理解</span>
+      <span class=&quot;anno__tag anno__tag--p1&quot;>最重要</span>
+      <span class=&quot;anno__tag&quot;>CTAなし</span>
+      <span class=&quot;anno__count&quot;>見出し20字／本文101字</span>
+    </div>
+
+    <h2 class=&quot;h2&quot;>デザインも、湿度管理も、妥協しない。</h2>
+    <p class=&quot;lead&quot;>両方を諦めなくていい理由があります。</p>
+    <p class=&quot;body&quot;>NAGIは、インテリアに馴染むミニマルなデザインと、スマホで完結する湿度管理を両立させました。見た目を選ぶか、使いやすさを選ぶか。その二択をなくすためにつくられています。</p>
+
+    <div class=&quot;grid-3&quot;>
+      <div class=&quot;ph ph--1x1&quot;>
+        <span class=&quot;ph__label&quot;>ミストグレー</span>
+        <span class=&quot;ph__meta&quot;>推奨比率 1:1<br><strong>現物なし</strong></span>
+      </div>
+      <div class=&quot;ph ph--1x1&quot;>
+        <span class=&quot;ph__label&quot;>ディープグリーン</span>
+        <span class=&quot;ph__meta&quot;>推奨比率 1:1<br>現物あり（流用可）</span>
+      </div>
+      <div class=&quot;ph ph--1x1&quot;>
+        <span class=&quot;ph__label&quot;>サンドベージュ</span>
+        <span class=&quot;ph__meta&quot;>推奨比率 1:1<br><strong>現物なし</strong></span>
+      </div>
+    </div>
+    <p class=&quot;cap&quot; style=&quot;margin-top:var(--sp-16)&quot;>3色展開のカラーバリエーション写真<span class=&quot;todo&quot;>2色分の撮影が未手配</span></p>
+  </div>
+</section>
+
+<!-- ============================================================
+     セクション4：主な特徴（解決策の理解②）
+     ============================================================ -->
+<section class=&quot;sec sec--alt&quot;>
+  <div class=&quot;container&quot;>
+    <div class=&quot;anno&quot;>
+      <span class=&quot;anno__num&quot;>04</span>
+      <span class=&quot;anno__name&quot;>5つの特徴</span>
+      <span class=&quot;anno__tag&quot;>心理：解決策の理解</span>
+      <span class=&quot;anno__tag anno__tag--p2&quot;>重要</span>
+      <span class=&quot;anno__tag&quot;>CTAなし（直後にCTA②）</span>
+      <span class=&quot;anno__count&quot;>見出し18字／本文33字</span>
+    </div>
+
+    <h2 class=&quot;h2&quot;>暮らしに、静かに寄り添う5つの工夫。</h2>
+    <p class=&quot;lead&quot;>機能も、見た目も、手を抜いていません。</p>
+    <p class=&quot;body&quot;>NAGIには、日々の使いやすさを支える5つの工夫があります。</p>
+
+    <div class=&quot;grid-3&quot;>
+      <div class=&quot;card&quot;>
+        <div class=&quot;ph ph--icon&quot;><span class=&quot;ph__meta&quot;>アイコン</span></div>
+        <p class=&quot;card__t&quot;>スマホで遠隔・自動操作ができる</p>
+      </div>
+      <div class=&quot;card&quot;>
+        <div class=&quot;ph ph--icon&quot;><span class=&quot;ph__meta&quot;>アイコン</span></div>
+        <p class=&quot;card__t&quot;>20dB以下の静かな運転音<br><span class=&quot;cap&quot;>（就寝時にも配慮）</span></p>
+      </div>
+      <div class=&quot;card&quot;>
+        <div class=&quot;ph ph--icon&quot;><span class=&quot;ph__meta&quot;>アイコン</span></div>
+        <p class=&quot;card__t&quot;>工具を使わず分解して洗える抗菌タンク</p>
+      </div>
+      <div class=&quot;card&quot;>
+        <div class=&quot;ph ph--icon&quot;><span class=&quot;ph__meta&quot;>アイコン</span></div>
+        <p class=&quot;card__t&quot;>インテリアに馴染むミニマルなデザイン（3色展開）</p>
+      </div>
+      <div class=&quot;card&quot;>
+        <div class=&quot;ph ph--icon&quot;><span class=&quot;ph__meta&quot;>アイコン</span></div>
+        <p class=&quot;card__t&quot;>満水・空焚きになると自動で止まる安全設計</p>
+      </div>
+    </div>
+    <p class=&quot;cap&quot; style=&quot;margin-top:var(--sp-16)&quot;>アイコン5点<span class=&quot;todo&quot;>現物なし — 作成が必要（線画で統一）</span></p>
+  </div>
+</section>
+
+<!-- ---------- CTA② 機能訴求後 ---------- -->
+<div class=&quot;cta-band&quot;>
+  <div class=&quot;container&quot;>
+    <div class=&quot;anno&quot;>
+      <span class=&quot;anno__num&quot;>CTA②</span>
+      <span class=&quot;anno__name&quot;>機能訴求後の節目</span>
+      <span class=&quot;anno__tag anno__tag--p1&quot;>最重要</span>
+      <span class=&quot;anno__count&quot;>01_requirements L61／04_design-system §5 準拠</span>
+    </div>
+    <a href=&quot;#&quot; class=&quot;cta__btn&quot;>NAGIを購入する</a>
+    <p class=&quot;cta__sub&quot;>12,800円（税込）＋送料800円</p>
+  </div>
+</div>
+
+<!-- ============================================================
+     セクション5：アプリ連携（解決策の理解③）
+     ============================================================ -->
+<section class=&quot;sec&quot;>
+  <div class=&quot;container&quot;>
+    <div class=&quot;anno&quot;>
+      <span class=&quot;anno__num&quot;>05</span>
+      <span class=&quot;anno__name&quot;>スマホひとつで、湿度管理を</span>
+      <span class=&quot;anno__tag&quot;>心理：解決策の理解</span>
+      <span class=&quot;anno__tag anno__tag--p2&quot;>重要</span>
+      <span class=&quot;anno__tag&quot;>CTAなし</span>
+      <span class=&quot;anno__count&quot;>見出し17字／本文75字</span>
+    </div>
+
+    <div class=&quot;grid-2&quot;>
+      <div>
+        <h2 class=&quot;h2&quot;>湿度のことは、スマホに任せる。</h2>
+        <p class=&quot;lead&quot;>外出先からも、操作できます。</p>
+        <p class=&quot;body&quot;>専用アプリで、湿度や運転スケジュールを管理できます。外出先から確認したり、帰宅に合わせて運転を開始したりすることも可能です。</p>
+        <ul class=&quot;list&quot;>
+          <li>現在の湿度をスマホで確認できる</li>
+          <li>運転スケジュールを設定できる</li>
+          <li>外出先からの操作にも対応</li>
+        </ul>
+      </div>
+
+      <div class=&quot;ph ph--4x3&quot;>
+        <span class=&quot;ph__label&quot;>実機＋アプリ画面のセット写真</span>
+        <span class=&quot;ph__meta&quot;>Nature Remo分析から採用した見せ方／推奨比率 4:3<br>アプリ画面の現物あり：assets/original/nagi_app_screen_mock.png<br><strong>実機と並べた合成カットは未作成</strong></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     セクション6：生活空間での使用シーン（解決策の理解④）
+     ============================================================ -->
+<section class=&quot;sec sec--alt&quot;>
+  <div class=&quot;container&quot;>
+    <div class=&quot;anno&quot;>
+      <span class=&quot;anno__num&quot;>06</span>
+      <span class=&quot;anno__name&quot;>部屋に置いたときの佇まい</span>
+      <span class=&quot;anno__tag&quot;>心理：解決策の理解</span>
+      <span class=&quot;anno__tag anno__tag--p2&quot;>重要</span>
+      <span class=&quot;anno__tag&quot;>CTAなし</span>
+      <span class=&quot;anno__count&quot;>見出し16字／本文76字</span>
+    </div>
+
+    <h2 class=&quot;h2&quot;>置いているだけで、部屋が整う。</h2>
+    <p class=&quot;lead&quot;>在宅ワークのデスクにも、自然に馴染みます。</p>
+    <p class=&quot;body&quot;>NAGIは、家電らしさを感じさせない佇まいを目指してつくりました。デスクの上に置いても、インテリアの一部として馴染みます。</p>
+
+    <div style=&quot;margin-top:var(--sp-48)&quot;>
+      <div class=&quot;ph ph--16x9&quot;>
+        <span class=&quot;ph__label&quot;>生活空間カット（デスク周り）</span>
+        <span class=&quot;ph__meta&quot;>1パターンに絞る（03_reference-analysis方針）／推奨比率 16:9<br>現物あり：assets/original/nagi_lifestyle_01.png</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     セクション7：選ばれる理由・実績（信頼）
+     ============================================================ -->
+<section class=&quot;sec&quot;>
+  <div class=&quot;container&quot;>
+    <div class=&quot;anno&quot;>
+      <span class=&quot;anno__num&quot;>07</span>
+      <span class=&quot;anno__name&quot;>選ばれている理由</span>
+      <span class=&quot;anno__tag&quot;>心理：信頼</span>
+      <span class=&quot;anno__tag anno__tag--p1&quot;>最重要</span>
+      <span class=&quot;anno__tag&quot;>CTAなし（直後にCTA③）</span>
+      <span class=&quot;anno__count&quot;>見出し12字／本文93字</span>
+    </div>
+
+    <h2 class=&quot;h2&quot;>512名が、先に選んだ理由。</h2>
+    <p class=&quot;lead&quot;>クラウドファンディングからはじまりました。</p>
+    <p class=&quot;body&quot;>NAGIは、クラウドファンディングで512名の方に支援していただき、開発を進めてきました。プロダクトデザイナーを中心としたチームが、「置いて美しい」という視点で設計しています。<span class=&quot;todo&quot;>開発体制の表現は要確認</span></p>
+
+    <div class=&quot;grid-2&quot;>
+      <div>
+        <div class=&quot;card&quot; style=&quot;margin-bottom:var(--sp-16)&quot;>
+          <p class=&quot;card__n&quot;>クラウドファンディング支援者</p>
+          <p class=&quot;h2&quot; style=&quot;font-size:40px&quot;>512<span style=&quot;font-size:20px&quot;>名</span></p>
+        </div>
+        <div class=&quot;card&quot;>
+          <p class=&quot;card__n&quot;>支援総額</p>
+          <p class=&quot;h2&quot; style=&quot;font-size:40px&quot;>8,942,000<span style=&quot;font-size:20px&quot;>円</span></p>
+          <p class=&quot;cap&quot; style=&quot;margin-top:var(--sp-8)&quot;>出典：クラウドファンディング公式ページ<span class=&quot;todo&quot;>金額表記・掲載許可が要確認</span></p>
+        </div>
+      </div>
+
+      <div class=&quot;ph ph--4x3&quot;>
+        <span class=&quot;ph__label&quot;>CFページのキャプチャ</span>
+        <span class=&quot;ph__meta&quot;>出典明記が必須／推奨比率 4:3<br><strong>現物なし — 掲載許可の確認が先</strong></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ---------- CTA③ 信頼情報後 ---------- -->
+<div class=&quot;cta-band&quot;>
+  <div class=&quot;container&quot;>
+    <div class=&quot;anno&quot;>
+      <span class=&quot;anno__num&quot;>CTA③</span>
+      <span class=&quot;anno__name&quot;>信頼情報後の節目</span>
+      <span class=&quot;anno__tag anno__tag--p1&quot;>最重要</span>
+      <span class=&quot;anno__count&quot;>実績で信頼が高まった直後に再提示</span>
+    </div>
+    <a href=&quot;#&quot; class=&quot;cta__btn&quot;>NAGIを購入する</a>
+    <p class=&quot;cta__sub&quot;>30日間の返品保証つき</p>
+  </div>
+</div>
+
+<!-- ============================================================
+     セクション8：よくある質問（不安解消①）
+     ============================================================ -->
+<section class=&quot;sec sec--alt&quot;>
+  <div class=&quot;container&quot;>
+    <div class=&quot;anno&quot;>
+      <span class=&quot;anno__num&quot;>08</span>
+      <span class=&quot;anno__name&quot;>よくある質問</span>
+      <span class=&quot;anno__tag&quot;>心理：不安解消</span>
+      <span class=&quot;anno__tag anno__tag--p3&quot;>補足</span>
+      <span class=&quot;anno__tag&quot;>CTAなし</span>
+      <span class=&quot;anno__tag&quot;>画像なし</span>
+      <span class=&quot;anno__count&quot;>見出し17字／本文なし（Q&amp;amp;A 4件）</span>
+    </div>
+
+    <h2 class=&quot;h2&quot;>気になることは、先にお答えします。</h2>
+    <p class=&quot;lead&quot;>購入前に知っておきたいこと。</p>
+
+    <div class=&quot;faq&quot;>
+      <div class=&quot;faq__item&quot;>
+        <p class=&quot;faq__q&quot;>Q. 電気代の目安は？</p>
+        <p class=&quot;faq__a&quot;>A. 標準運転で1時間あたり約0.3円です。<span class=&quot;todo&quot;>実測条件の明記が要確認</span></p>
+      </div>
+      <div class=&quot;faq__item&quot;>
+        <p class=&quot;faq__q&quot;>Q. フィルター交換の頻度は？</p>
+        <p class=&quot;faq__a&quot;>A. 目安として2〜3ヶ月に1回です（使用状況により変動）。</p>
+      </div>
+      <div class=&quot;faq__item&quot;>
+        <p class=&quot;faq__q&quot;>Q. Wi-Fiがない環境でも使えますか？</p>
+        <p class=&quot;faq__a&quot;>A. 手動での加湿機能は使用できますが、アプリ連携機能は利用できません。</p>
+      </div>
+      <div class=&quot;faq__item&quot;>
+        <p class=&quot;faq__q&quot;>Q. どのくらいの広さの部屋に向いていますか？</p>
+        <p class=&quot;faq__a&quot;>A. 目安は〜12畳です。15畳を超える部屋では、加湿力が不足する場合があります。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     セクション9：保証・スペック（不安解消②）
+     ============================================================ -->
+<section class=&quot;sec&quot;>
+  <div class=&quot;container&quot;>
+    <div class=&quot;anno&quot;>
+      <span class=&quot;anno__num&quot;>09</span>
+      <span class=&quot;anno__name&quot;>保証とスペック</span>
+      <span class=&quot;anno__tag&quot;>心理：不安解消</span>
+      <span class=&quot;anno__tag anno__tag--p3&quot;>補足</span>
+      <span class=&quot;anno__tag&quot;>CTAなし</span>
+      <span class=&quot;anno__tag&quot;>画像なし</span>
+      <span class=&quot;anno__count&quot;>見出し15字／本文44字</span>
+    </div>
+
+    <h2 class=&quot;h2&quot;>安心して、試していただくために。</h2>
+    <p class=&quot;lead&quot;>万が一のときも、サポートします。</p>
+    <p class=&quot;body&quot;>NAGIには、購入後30日間の返品保証と、1年間のメーカー保証がついています。</p>
+
+    <div class=&quot;grid-2&quot; style=&quot;margin-top:var(--sp-32)&quot;>
+      <div class=&quot;card&quot;><p class=&quot;card__n&quot;>保証01</p><p class=&quot;card__t&quot;>購入後30日間の返品保証</p></div>
+      <div class=&quot;card&quot;><p class=&quot;card__n&quot;>保証02</p><p class=&quot;card__t&quot;>1年間のメーカー保証</p></div>
+    </div>
+
+    <h3 class=&quot;h3&quot; style=&quot;margin-top:var(--sp-48)&quot;>スペック</h3>
+    <table class=&quot;spec&quot;>
+      <tbody>
+        <tr><th>サイズ</th><td>W140 × D140 × H280 mm</td></tr>
+        <tr><th>重量</th><td>約1.1kg（水を入れない状態）</td></tr>
+        <tr><th>タンク容量</th><td>2.5L（満水で約20時間連続運転）</td></tr>
+        <tr><th>静音性</th><td>20dB以下（最小運転時）</td></tr>
+        <tr><th>対応通信</th><td>Wi-Fi 2.4GHz帯</td></tr>
+        <tr><th>対応アプリ</th><td>iOS 15以降／Android 11以降</td></tr>
+      </tbody>
+    </table>
+    <p class=&quot;cap&quot; style=&quot;margin-top:var(--sp-16)&quot;><span class=&quot;todo&quot;>量産版の実仕様との整合が要確認</span></p>
+  </div>
+</section>
+
+<!-- ============================================================
+     セクション10：最終CTA・問い合わせ（行動）
+     ============================================================ -->
+<section class=&quot;sec sec--strong sec--alt&quot;>
+  <div class=&quot;container&quot;>
+    <div class=&quot;anno&quot;>
+      <span class=&quot;anno__num&quot;>10</span>
+      <span class=&quot;anno__name&quot;>購入・お問い合わせ</span>
+      <span class=&quot;anno__tag&quot;>心理：行動</span>
+      <span class=&quot;anno__tag anno__tag--p1&quot;>最重要</span>
+      <span class=&quot;anno__tag&quot;>CTA④ あり</span>
+      <span class=&quot;anno__count&quot;>見出し15字／本文61字</span>
+    </div>
+
+    <div class=&quot;grid-2&quot;>
+      <div>
+        <h2 class=&quot;h2&quot;>今日から、部屋の空気を変える。</h2>
+        <p class=&quot;lead&quot;>NAGIと、心地よい湿度を。</p>
+        <p class=&quot;body&quot;>価格は12,800円（税込）、送料800円です。30日間の返品保証もありますので、まずは試してみてください。</p>
+
+        <div class=&quot;cta&quot;>
+          <a href=&quot;#&quot; class=&quot;cta__btn&quot;>NAGIを購入する</a>
+          <p class=&quot;cta__sub&quot;>遷移先：自社ECサイト（Shopify）商品購入ページ</p>
+        </div>
+      </div>
+
+      <div class=&quot;ph ph--4x3&quot;>
+        <span class=&quot;ph__label&quot;>商品写真の再掲</span>
+        <span class=&quot;ph__meta&quot;>ヒーローと同一、または別アングル／推奨比率 4:3<br>現物あり（流用可）</span>
+      </div>
+    </div>
+
+    <!-- 問い合わせフォーム -->
+    <div style=&quot;margin-top:var(--sp-96)&quot;>
+      <div class=&quot;anno&quot;>
+        <span class=&quot;anno__num&quot;>10-b</span>
+        <span class=&quot;anno__name&quot;>お問い合わせフォーム</span>
+        <span class=&quot;anno__tag anno__tag--p3&quot;>補足</span>
+        <span class=&quot;anno__count&quot;>購入に進めない人の受け皿／FAQ後・末尾に控えめに設置</span>
+      </div>
+
+      <h3 class=&quot;h3&quot;>ご不明な点はこちらから</h3>
+      <div class=&quot;form&quot;>
+        <div class=&quot;form__row&quot;>
+          <label class=&quot;form__label&quot;>お名前 <span class=&quot;form__req&quot;>必須</span></label>
+          <div class=&quot;form__box&quot;></div>
+        </div>
+        <div class=&quot;form__row&quot;>
+          <label class=&quot;form__label&quot;>メールアドレス <span class=&quot;form__req&quot;>必須</span></label>
+          <div class=&quot;form__box&quot;></div>
+        </div>
+        <div class=&quot;form__row&quot;>
+          <label class=&quot;form__label&quot;>お問い合わせ内容 <span class=&quot;form__req&quot;>任意</span></label>
+          <div class=&quot;form__box form__box--area&quot;></div>
+        </div>
+        <p class=&quot;cap&quot;>送信先：support@nagilab.co.jp／受付完了の自動返信あり</p>
+        <div class=&quot;cta&quot;>
+          <a href=&quot;#&quot; class=&quot;cta__btn&quot; style=&quot;background:transparent;color:var(--c-text);border:1px solid var(--c-line-mid)&quot;>送信する</a>
+          <p class=&quot;cta__sub&quot;>※補助CTA。主要CTAより弱く表示（ルールブック PART8-1）</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     フッター
+     ============================================================ -->
+<footer class=&quot;foot&quot;>
+  <div class=&quot;container&quot;>
+    <div class=&quot;anno&quot; style=&quot;background:rgba(255,255,255,.12);border-left-color:rgba(255,255,255,.4);color:rgba(255,255,255,.75)&quot;>
+      <span class=&quot;anno__name&quot; style=&quot;color:#fff&quot;>フッター（必須掲載情報）</span>
+      <span class=&quot;anno__count&quot;>01_requirements §6 準拠</span>
+    </div>
+    <p>株式会社Nagi Lab</p>
+    <ul>
+      <li>特定商取引法に基づく表記</li>
+      <li>個人情報保護方針<span class=&quot;todo&quot; style=&quot;border-color:rgba(255,255,255,.4);color:rgba(255,255,255,.7)&quot;>8月20日納品予定</span></li>
+      <li>会社概要</li>
+      <li>PSEマーク等の法定表示<span class=&quot;todo&quot; style=&quot;border-color:rgba(255,255,255,.4);color:rgba(255,255,255,.7)&quot;>認証番号が未確定</span></li>
+    </ul>
+  </div>
+</footer>
+
+<!-- SP固定CTA -->
+<div class=&quot;sticky&quot;>
+  <a href=&quot;#&quot; class=&quot;cta__btn&quot;>NAGIを購入する</a>
+  <p class=&quot;sticky__note&quot;>スマホのみ表示（04_design-system §5）／一定スクロール後に表示する想定</p>
+</div>
+
+<script>
+  // 親ビューアからの注釈ON/OFF切替を受け取る
+  window.addEventListener('message', function (e) {
+    if (e.data &amp;&amp; e.data.type === 'toggle-anno') {
+      document.body.classList.toggle('no-anno', !e.data.show);
+    }
+  });
+</script>
+
+</body>
+</html>
+" title="PC版ワイヤーフレーム"></iframe>
+        </div>
+      </div>
+
+      <div class="dev dev--sp">
+        <p class="dev__cap">スマホ版 <span class="dev__dim">390px 幅／等倍</span></p>
+        <div class="dev__screen">
+          <iframe srcdoc="<!DOCTYPE html>
+<html lang=&quot;ja&quot;>
+<head>
+<meta charset=&quot;UTF-8&quot;>
+<meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;>
+<title>NAGI LP ワイヤーフレーム</title>
+<style>
+  /* ==========================================================
+     NAGI LP ワイヤーフレーム
+     ローファイ（グレースケール）。本番デザインではありません。
+     数値は docs/04_design-system.md 準拠
+     ========================================================== */
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --c-bg:        #ffffff;
+    --c-surface:   #f7f7f7;
+    --c-line:      #e3e3e3;
+    --c-line-mid:  #c4c4c4;
+    --c-muted:     #9a9a9a;
+    --c-text:      #333333;
+    --c-solid:     #4a4a4a;
+
+    /* 余白スケール（4/8/12/16/24/32/48/64/96px のみ） */
+    --sp-4: 4px;  --sp-8: 8px;   --sp-12: 12px; --sp-16: 16px;
+    --sp-24: 24px; --sp-32: 32px; --sp-48: 48px; --sp-64: 64px; --sp-96: 96px;
+
+    --container: 1140px;
+    --sec-pad: var(--sp-96);      /* セクション余白 標準（PC） */
+    --sec-pad-strong: 140px;      /* セクション余白 強調（PC） */
+  }
+
+  html { -webkit-text-size-adjust: 100%; }
+
+  body {
+    font-family: 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', sans-serif;
+    background: var(--c-bg);
+    color: var(--c-text);
+    line-height: 1.8;
+    overflow-x: hidden;
+  }
+
+  .container {
+    width: 100%;
+    max-width: var(--container);
+    margin-inline: auto;
+    padding-inline: var(--sp-32);
+  }
+
+  /* ---------- セクション ---------- */
+  .sec { padding-block: var(--sec-pad); border-bottom: 1px dashed var(--c-line); }
+  .sec--strong { padding-block: var(--sec-pad-strong); }
+  .sec--alt { background: var(--c-surface); }
+
+  /* ---------- 注釈（表示ON/OFF可） ---------- */
+  .anno {
+    display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-8);
+    margin-bottom: var(--sp-32);
+    padding: var(--sp-8) var(--sp-12);
+    background: var(--c-surface);
+    border-left: 4px solid var(--c-line-mid);
+    font-size: 12px; line-height: 1.6; color: var(--c-muted);
+  }
+  .anno__num {
+    display: inline-flex; align-items: center; justify-content: center;
+    min-width: 24px; height: 24px; padding-inline: var(--sp-4);
+    background: var(--c-solid); color: #fff;
+    border-radius: 4px; font-weight: 700; font-size: 12px;
+  }
+  .anno__name { font-weight: 700; color: var(--c-text); font-size: 13px; }
+  .anno__tag {
+    padding: 2px var(--sp-8);
+    border: 1px solid var(--c-line-mid); border-radius: 999px;
+    font-size: 11px; white-space: nowrap;
+  }
+  .anno__tag--p1 { background: var(--c-solid); color: #fff; border-color: var(--c-solid); }
+  .anno__tag--p2 { background: var(--c-line-mid); color: #fff; border-color: var(--c-line-mid); }
+  .anno__tag--p3 { background: transparent; color: var(--c-muted); }
+  .anno__count { margin-left: auto; font-variant-numeric: tabular-nums; font-size: 11px; }
+
+  /* 注釈OFF時 */
+  body.no-anno .anno { display: none; }
+  body.no-anno .ph__meta { display: none; }
+
+  /* ---------- 見出し・本文 ---------- */
+  .h1 { font-size: 56px; line-height: 1.2; font-weight: 700; letter-spacing: .01em; }
+  .h2 { font-size: 36px; line-height: 1.3; font-weight: 700; }
+  .h3 { font-size: 22px; line-height: 1.4; font-weight: 500; }
+  .lead { font-size: 18px; color: var(--c-muted); margin-top: var(--sp-16); }
+  .body { font-size: 16px; margin-top: var(--sp-24); max-width: 46em; }
+  .cap  { font-size: 13px; color: var(--c-muted); }
+
+  .list { margin-top: var(--sp-24); padding-left: 1.4em; max-width: 46em; }
+  .list li { font-size: 16px; margin-bottom: var(--sp-8); }
+
+  /* ---------- 画像プレースホルダ ---------- */
+  .ph {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: var(--sp-8);
+    border: 2px dashed var(--c-line-mid);
+    background: repeating-linear-gradient(
+      45deg, var(--c-surface), var(--c-surface) 10px, #f0f0f0 10px, #f0f0f0 20px
+    );
+    color: var(--c-muted);
+    text-align: center;
+    padding: var(--sp-24);
+  }
+  .ph__label { font-size: 14px; font-weight: 700; color: var(--c-text); }
+  .ph__meta  { font-size: 11px; line-height: 1.6; }
+  .ph--16x9 { aspect-ratio: 16 / 9; }
+  .ph--4x3  { aspect-ratio: 4 / 3; }
+  .ph--1x1  { aspect-ratio: 1 / 1; }
+  .ph--3x4  { aspect-ratio: 3 / 4; }
+  /* 特徴カード内のアイコン枠（文字が折り返さない最小サイズ） */
+  .ph--icon {
+    width: 56px; height: 56px; padding: var(--sp-4);
+    margin-bottom: var(--sp-16); border-width: 1px;
+    font-size: 9px; line-height: 1.2;
+  }
+  .ph--icon .ph__meta { font-size: 9px; white-space: nowrap; }
+
+  /* ---------- CTA ---------- */
+  .cta { margin-top: var(--sp-32); }
+  .cta__btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    min-height: 52px; padding: var(--sp-12) var(--sp-32);
+    background: var(--c-solid); color: #fff;
+    border-radius: 6px;
+    font-size: 17px; font-weight: 700; text-decoration: none;
+  }
+  .cta__sub { margin-top: var(--sp-8); font-size: 13px; color: var(--c-muted); }
+
+  /* CTA帯（セクション間の節目に置く独立CTA） */
+  .cta-band {
+    padding-block: var(--sp-64);
+    background: var(--c-surface);
+    border-block: 1px solid var(--c-line);
+    text-align: center;
+  }
+  .cta-band .anno { justify-content: center; text-align: left; }
+
+  /* ---------- レイアウトパターン ---------- */
+  /* テキスト列を広めに取り、H1が意図しない位置で折り返さないようにする
+     （ルールブック PART6-4「1文字だけ次行へ残る状態を避ける」） */
+  .hero { display: grid; grid-template-columns: 1.15fr .85fr; gap: var(--sp-48); align-items: center; }
+
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--sp-32); margin-top: var(--sp-48); }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-48); align-items: center; margin-top: var(--sp-48); }
+
+  .card {
+    padding: var(--sp-24);
+    border: 1px solid var(--c-line);
+    background: var(--c-bg);
+    border-radius: 8px;
+  }
+  .card__n { font-size: 12px; color: var(--c-muted); }
+  .card__t { font-size: 17px; font-weight: 700; margin-top: var(--sp-4); line-height: 1.5; }
+
+  /* FAQ */
+  .faq { margin-top: var(--sp-48); max-width: 46em; }
+  .faq__item { padding-block: var(--sp-24); border-bottom: 1px solid var(--c-line); }
+  .faq__q { font-size: 17px; font-weight: 700; }
+  .faq__a { font-size: 15px; margin-top: var(--sp-8); color: #555; }
+
+  /* スペック表 */
+  .spec { width: 100%; margin-top: var(--sp-32); border-collapse: collapse; font-size: 15px; }
+  .spec th, .spec td { padding: var(--sp-12) var(--sp-16); border-bottom: 1px solid var(--c-line); text-align: left; }
+  .spec th { width: 34%; font-weight: 700; background: var(--c-surface); white-space: nowrap; }
+
+  /* フォーム */
+  .form { margin-top: var(--sp-32); max-width: 480px; }
+  .form__row { margin-bottom: var(--sp-16); }
+  .form__label { display: block; font-size: 13px; font-weight: 700; margin-bottom: var(--sp-4); }
+  .form__req { color: var(--c-muted); font-weight: 400; }
+  .form__box { height: 44px; border: 1px solid var(--c-line-mid); border-radius: 4px; background: var(--c-surface); }
+  .form__box--area { height: 96px; }
+
+  /* 未確定マーカー */
+  .todo {
+    display: inline-block; padding: 1px var(--sp-8); margin-left: var(--sp-4);
+    border: 1px dashed var(--c-line-mid); border-radius: 4px;
+    font-size: 11px; color: var(--c-muted); white-space: nowrap;
+  }
+  body.no-anno .todo { display: none; }
+
+  /* フッター */
+  .foot { padding-block: var(--sp-48); background: var(--c-solid); color: #fff; font-size: 13px; }
+  .foot ul { list-style: none; display: flex; flex-wrap: wrap; gap: var(--sp-24); margin-top: var(--sp-16); }
+
+  /* SP固定CTA（スマホのみ表示） */
+  .sticky {
+    display: none;
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 50;
+    padding: var(--sp-12) var(--sp-16);
+    background: rgba(255,255,255,.96);
+    border-top: 1px solid var(--c-line);
+  }
+  .sticky .cta__btn { width: 100%; }
+  .sticky__note { font-size: 10px; color: var(--c-muted); text-align: center; margin-top: var(--sp-4); }
+
+  /* ==========================================================
+     タブレット 768〜1023px
+     ========================================================== */
+  @media (max-width: 1023px) {
+    :root { --sec-pad: 72px; --sec-pad-strong: 104px; }
+    .container { padding-inline: var(--sp-24); }
+    .hero { grid-template-columns: 1fr; gap: var(--sp-48); }
+    .grid-3 { grid-template-columns: 1fr 1fr; }
+    .h1 { font-size: 44px; }
+    .h2 { font-size: 32px; }
+  }
+
+  /* ==========================================================
+     スマートフォン 〜767px
+     ========================================================== */
+  @media (max-width: 767px) {
+    :root { --sec-pad: var(--sp-64); --sec-pad-strong: 80px; }
+
+    body { line-height: 1.7; padding-bottom: 88px; } /* 固定CTA分の余白 */
+
+    .container { padding-inline: var(--sp-16); }
+
+    .h1 { font-size: 36px; line-height: 1.25; }
+    .h2 { font-size: 26px; }
+    .h3 { font-size: 18px; }
+    .lead { font-size: 16px; margin-top: var(--sp-12); }
+    .body { font-size: 15px; margin-top: var(--sp-16); }
+    .list li { font-size: 15px; }
+
+    .hero, .grid-2 { grid-template-columns: 1fr; gap: var(--sp-32); }
+    .grid-3 { grid-template-columns: 1fr; gap: var(--sp-16); margin-top: var(--sp-32); }
+
+    .cta__btn { width: 100%; font-size: 16px; }
+    .cta-band { padding-block: var(--sp-48); }
+
+    .anno { margin-bottom: var(--sp-24); }
+    .anno__count { margin-left: 0; width: 100%; }
+
+    /* スペック表はカード型に組み替え（横スクロールを出さない） */
+    .spec, .spec tbody, .spec tr, .spec th, .spec td { display: block; width: 100%; }
+    .spec tr { border-bottom: 1px solid var(--c-line); padding-block: var(--sp-8); }
+    .spec th { background: transparent; padding: 0 0 var(--sp-4); font-size: 13px; color: var(--c-muted); }
+    .spec td { padding: 0 0 var(--sp-8); border: 0; }
+
+    .sticky { display: block; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     セクション1：ヒーロー（興味）
+     ============================================================ -->
+<section class=&quot;sec sec--strong&quot;>
+  <div class=&quot;container&quot;>
+    <div class=&quot;anno&quot;>
+      <span class=&quot;anno__num&quot;>01</span>
+      <span class=&quot;anno__name&quot;>ヒーロー</span>
+      <span class=&quot;anno__tag&quot;>心理：興味</span>
+      <span class=&quot;anno__tag anno__tag--p1&quot;>最重要</span>
+      <span class=&quot;anno__tag&quot;>CTA① あり</span>
+      <span class=&quot;anno__count&quot;>見出し18字／本文62字</span>
+    </div>
+
+    <div class=&quot;hero&quot;>
+      <div>
+        <h1 class=&quot;h1&quot;>置いているだけで、<br>部屋が整う加湿器。</h1>
+        <p class=&quot;lead&quot;>デザインも、湿度管理も、あきらめない。</p>
+        <p class=&quot;body&quot;>NAGIは、見た目も使い勝手も妥協したくない人のための加湿器です。スマホひとつで湿度を管理でき、静かに部屋に溶け込みます。</p>
+
+        <div class=&quot;cta&quot;>
+          <a href=&quot;#&quot; class=&quot;cta__btn&quot;>NAGIを購入する（12,800円 税込）</a>
+          <p class=&quot;cta__sub&quot;>送料800円／30日間返品保証・1年間メーカー保証<span class=&quot;todo&quot;>価格は公開時に要最終確認</span></p>
+        </div>
+      </div>
+
+      <div class=&quot;ph ph--3x4&quot;>
+        <span class=&quot;ph__label&quot;>商品単体写真（白背景）</span>
+        <span class=&quot;ph__meta&quot;>斜め上からのアングル／推奨比率 3:4<br>現物あり：assets/original/nagi_product_white_01.png</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     セクション2：悩みの提示（共感）
+     ============================================================ -->
+<section class=&quot;sec sec--alt&quot;>
+  <div class=&quot;container&quot;>
+    <div class=&quot;anno&quot;>
+      <span class=&quot;anno__num&quot;>02</span>
+      <span class=&quot;anno__name&quot;>こんな悩みはありませんか</span>
+      <span class=&quot;anno__tag&quot;>心理：共感</span>
+      <span class=&quot;anno__tag anno__tag--p2&quot;>重要</span>
+      <span class=&quot;anno__tag&quot;>CTAなし</span>
+      <span class=&quot;anno__count&quot;>見出し24字／本文89字</span>
+    </div>
+
+    <h2 class=&quot;h2&quot;>加湿器を置きたいのに、置けない理由がある。</h2>
+    <p class=&quot;lead&quot;>なんとなく、後回しにしていませんか。</p>
+    <p class=&quot;body&quot;>空気が乾燥すると、喉や肌の調子が気になります。それでも加湿器を置かない人は多くいます。理由は「部屋に生活感が出てしまう」「手入れが面倒で続かない」という2つです。</p>
+
+    <div class=&quot;grid-3&quot;>
+      <div class=&quot;card&quot;><p class=&quot;card__n&quot;>01</p><p class=&quot;card__t&quot;>乾燥で喉や肌の<br>調子を崩しやすい</p></div>
+      <div class=&quot;card&quot;><p class=&quot;card__n&quot;>02</p><p class=&quot;card__t&quot;>加湿器のデザインが<br>部屋に馴染まない</p></div>
+      <div class=&quot;card&quot;><p class=&quot;card__n&quot;>03</p><p class=&quot;card__t&quot;>フィルター掃除が<br>面倒で続かない</p></div>
+    </div>
+
+    <div style=&quot;margin-top:var(--sp-48)&quot;>
+      <div class=&quot;ph ph--16x9&quot;>
+        <span class=&quot;ph__label&quot;>悩みを表現するイラストまたは写真</span>
+        <span class=&quot;ph__meta&quot;>人物を写さず雰囲気で伝える／推奨比率 16:9<br><strong>現物なし — 新規手配が必要</strong></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     セクション3：価値提案（解決策の理解①）
+     ============================================================ -->
+<section class=&quot;sec&quot;>
+  <div class=&quot;container&quot;>
+    <div class=&quot;anno&quot;>
+      <span class=&quot;anno__num&quot;>03</span>
+      <span class=&quot;anno__name&quot;>NAGIが解決すること</span>
+      <span class=&quot;anno__tag&quot;>心理：解決策の理解</span>
+      <span class=&quot;anno__tag anno__tag--p1&quot;>最重要</span>
+      <span class=&quot;anno__tag&quot;>CTAなし</span>
+      <span class=&quot;anno__count&quot;>見出し20字／本文101字</span>
+    </div>
+
+    <h2 class=&quot;h2&quot;>デザインも、湿度管理も、妥協しない。</h2>
+    <p class=&quot;lead&quot;>両方を諦めなくていい理由があります。</p>
+    <p class=&quot;body&quot;>NAGIは、インテリアに馴染むミニマルなデザインと、スマホで完結する湿度管理を両立させました。見た目を選ぶか、使いやすさを選ぶか。その二択をなくすためにつくられています。</p>
+
+    <div class=&quot;grid-3&quot;>
+      <div class=&quot;ph ph--1x1&quot;>
+        <span class=&quot;ph__label&quot;>ミストグレー</span>
+        <span class=&quot;ph__meta&quot;>推奨比率 1:1<br><strong>現物なし</strong></span>
+      </div>
+      <div class=&quot;ph ph--1x1&quot;>
+        <span class=&quot;ph__label&quot;>ディープグリーン</span>
+        <span class=&quot;ph__meta&quot;>推奨比率 1:1<br>現物あり（流用可）</span>
+      </div>
+      <div class=&quot;ph ph--1x1&quot;>
+        <span class=&quot;ph__label&quot;>サンドベージュ</span>
+        <span class=&quot;ph__meta&quot;>推奨比率 1:1<br><strong>現物なし</strong></span>
+      </div>
+    </div>
+    <p class=&quot;cap&quot; style=&quot;margin-top:var(--sp-16)&quot;>3色展開のカラーバリエーション写真<span class=&quot;todo&quot;>2色分の撮影が未手配</span></p>
+  </div>
+</section>
+
+<!-- ============================================================
+     セクション4：主な特徴（解決策の理解②）
+     ============================================================ -->
+<section class=&quot;sec sec--alt&quot;>
+  <div class=&quot;container&quot;>
+    <div class=&quot;anno&quot;>
+      <span class=&quot;anno__num&quot;>04</span>
+      <span class=&quot;anno__name&quot;>5つの特徴</span>
+      <span class=&quot;anno__tag&quot;>心理：解決策の理解</span>
+      <span class=&quot;anno__tag anno__tag--p2&quot;>重要</span>
+      <span class=&quot;anno__tag&quot;>CTAなし（直後にCTA②）</span>
+      <span class=&quot;anno__count&quot;>見出し18字／本文33字</span>
+    </div>
+
+    <h2 class=&quot;h2&quot;>暮らしに、静かに寄り添う5つの工夫。</h2>
+    <p class=&quot;lead&quot;>機能も、見た目も、手を抜いていません。</p>
+    <p class=&quot;body&quot;>NAGIには、日々の使いやすさを支える5つの工夫があります。</p>
+
+    <div class=&quot;grid-3&quot;>
+      <div class=&quot;card&quot;>
+        <div class=&quot;ph ph--icon&quot;><span class=&quot;ph__meta&quot;>アイコン</span></div>
+        <p class=&quot;card__t&quot;>スマホで遠隔・自動操作ができる</p>
+      </div>
+      <div class=&quot;card&quot;>
+        <div class=&quot;ph ph--icon&quot;><span class=&quot;ph__meta&quot;>アイコン</span></div>
+        <p class=&quot;card__t&quot;>20dB以下の静かな運転音<br><span class=&quot;cap&quot;>（就寝時にも配慮）</span></p>
+      </div>
+      <div class=&quot;card&quot;>
+        <div class=&quot;ph ph--icon&quot;><span class=&quot;ph__meta&quot;>アイコン</span></div>
+        <p class=&quot;card__t&quot;>工具を使わず分解して洗える抗菌タンク</p>
+      </div>
+      <div class=&quot;card&quot;>
+        <div class=&quot;ph ph--icon&quot;><span class=&quot;ph__meta&quot;>アイコン</span></div>
+        <p class=&quot;card__t&quot;>インテリアに馴染むミニマルなデザイン（3色展開）</p>
+      </div>
+      <div class=&quot;card&quot;>
+        <div class=&quot;ph ph--icon&quot;><span class=&quot;ph__meta&quot;>アイコン</span></div>
+        <p class=&quot;card__t&quot;>満水・空焚きになると自動で止まる安全設計</p>
+      </div>
+    </div>
+    <p class=&quot;cap&quot; style=&quot;margin-top:var(--sp-16)&quot;>アイコン5点<span class=&quot;todo&quot;>現物なし — 作成が必要（線画で統一）</span></p>
+  </div>
+</section>
+
+<!-- ---------- CTA② 機能訴求後 ---------- -->
+<div class=&quot;cta-band&quot;>
+  <div class=&quot;container&quot;>
+    <div class=&quot;anno&quot;>
+      <span class=&quot;anno__num&quot;>CTA②</span>
+      <span class=&quot;anno__name&quot;>機能訴求後の節目</span>
+      <span class=&quot;anno__tag anno__tag--p1&quot;>最重要</span>
+      <span class=&quot;anno__count&quot;>01_requirements L61／04_design-system §5 準拠</span>
+    </div>
+    <a href=&quot;#&quot; class=&quot;cta__btn&quot;>NAGIを購入する</a>
+    <p class=&quot;cta__sub&quot;>12,800円（税込）＋送料800円</p>
+  </div>
+</div>
+
+<!-- ============================================================
+     セクション5：アプリ連携（解決策の理解③）
+     ============================================================ -->
+<section class=&quot;sec&quot;>
+  <div class=&quot;container&quot;>
+    <div class=&quot;anno&quot;>
+      <span class=&quot;anno__num&quot;>05</span>
+      <span class=&quot;anno__name&quot;>スマホひとつで、湿度管理を</span>
+      <span class=&quot;anno__tag&quot;>心理：解決策の理解</span>
+      <span class=&quot;anno__tag anno__tag--p2&quot;>重要</span>
+      <span class=&quot;anno__tag&quot;>CTAなし</span>
+      <span class=&quot;anno__count&quot;>見出し17字／本文75字</span>
+    </div>
+
+    <div class=&quot;grid-2&quot;>
+      <div>
+        <h2 class=&quot;h2&quot;>湿度のことは、スマホに任せる。</h2>
+        <p class=&quot;lead&quot;>外出先からも、操作できます。</p>
+        <p class=&quot;body&quot;>専用アプリで、湿度や運転スケジュールを管理できます。外出先から確認したり、帰宅に合わせて運転を開始したりすることも可能です。</p>
+        <ul class=&quot;list&quot;>
+          <li>現在の湿度をスマホで確認できる</li>
+          <li>運転スケジュールを設定できる</li>
+          <li>外出先からの操作にも対応</li>
+        </ul>
+      </div>
+
+      <div class=&quot;ph ph--4x3&quot;>
+        <span class=&quot;ph__label&quot;>実機＋アプリ画面のセット写真</span>
+        <span class=&quot;ph__meta&quot;>Nature Remo分析から採用した見せ方／推奨比率 4:3<br>アプリ画面の現物あり：assets/original/nagi_app_screen_mock.png<br><strong>実機と並べた合成カットは未作成</strong></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     セクション6：生活空間での使用シーン（解決策の理解④）
+     ============================================================ -->
+<section class=&quot;sec sec--alt&quot;>
+  <div class=&quot;container&quot;>
+    <div class=&quot;anno&quot;>
+      <span class=&quot;anno__num&quot;>06</span>
+      <span class=&quot;anno__name&quot;>部屋に置いたときの佇まい</span>
+      <span class=&quot;anno__tag&quot;>心理：解決策の理解</span>
+      <span class=&quot;anno__tag anno__tag--p2&quot;>重要</span>
+      <span class=&quot;anno__tag&quot;>CTAなし</span>
+      <span class=&quot;anno__count&quot;>見出し16字／本文76字</span>
+    </div>
+
+    <h2 class=&quot;h2&quot;>置いているだけで、部屋が整う。</h2>
+    <p class=&quot;lead&quot;>在宅ワークのデスクにも、自然に馴染みます。</p>
+    <p class=&quot;body&quot;>NAGIは、家電らしさを感じさせない佇まいを目指してつくりました。デスクの上に置いても、インテリアの一部として馴染みます。</p>
+
+    <div style=&quot;margin-top:var(--sp-48)&quot;>
+      <div class=&quot;ph ph--16x9&quot;>
+        <span class=&quot;ph__label&quot;>生活空間カット（デスク周り）</span>
+        <span class=&quot;ph__meta&quot;>1パターンに絞る（03_reference-analysis方針）／推奨比率 16:9<br>現物あり：assets/original/nagi_lifestyle_01.png</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     セクション7：選ばれる理由・実績（信頼）
+     ============================================================ -->
+<section class=&quot;sec&quot;>
+  <div class=&quot;container&quot;>
+    <div class=&quot;anno&quot;>
+      <span class=&quot;anno__num&quot;>07</span>
+      <span class=&quot;anno__name&quot;>選ばれている理由</span>
+      <span class=&quot;anno__tag&quot;>心理：信頼</span>
+      <span class=&quot;anno__tag anno__tag--p1&quot;>最重要</span>
+      <span class=&quot;anno__tag&quot;>CTAなし（直後にCTA③）</span>
+      <span class=&quot;anno__count&quot;>見出し12字／本文93字</span>
+    </div>
+
+    <h2 class=&quot;h2&quot;>512名が、先に選んだ理由。</h2>
+    <p class=&quot;lead&quot;>クラウドファンディングからはじまりました。</p>
+    <p class=&quot;body&quot;>NAGIは、クラウドファンディングで512名の方に支援していただき、開発を進めてきました。プロダクトデザイナーを中心としたチームが、「置いて美しい」という視点で設計しています。<span class=&quot;todo&quot;>開発体制の表現は要確認</span></p>
+
+    <div class=&quot;grid-2&quot;>
+      <div>
+        <div class=&quot;card&quot; style=&quot;margin-bottom:var(--sp-16)&quot;>
+          <p class=&quot;card__n&quot;>クラウドファンディング支援者</p>
+          <p class=&quot;h2&quot; style=&quot;font-size:40px&quot;>512<span style=&quot;font-size:20px&quot;>名</span></p>
+        </div>
+        <div class=&quot;card&quot;>
+          <p class=&quot;card__n&quot;>支援総額</p>
+          <p class=&quot;h2&quot; style=&quot;font-size:40px&quot;>8,942,000<span style=&quot;font-size:20px&quot;>円</span></p>
+          <p class=&quot;cap&quot; style=&quot;margin-top:var(--sp-8)&quot;>出典：クラウドファンディング公式ページ<span class=&quot;todo&quot;>金額表記・掲載許可が要確認</span></p>
+        </div>
+      </div>
+
+      <div class=&quot;ph ph--4x3&quot;>
+        <span class=&quot;ph__label&quot;>CFページのキャプチャ</span>
+        <span class=&quot;ph__meta&quot;>出典明記が必須／推奨比率 4:3<br><strong>現物なし — 掲載許可の確認が先</strong></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ---------- CTA③ 信頼情報後 ---------- -->
+<div class=&quot;cta-band&quot;>
+  <div class=&quot;container&quot;>
+    <div class=&quot;anno&quot;>
+      <span class=&quot;anno__num&quot;>CTA③</span>
+      <span class=&quot;anno__name&quot;>信頼情報後の節目</span>
+      <span class=&quot;anno__tag anno__tag--p1&quot;>最重要</span>
+      <span class=&quot;anno__count&quot;>実績で信頼が高まった直後に再提示</span>
+    </div>
+    <a href=&quot;#&quot; class=&quot;cta__btn&quot;>NAGIを購入する</a>
+    <p class=&quot;cta__sub&quot;>30日間の返品保証つき</p>
+  </div>
+</div>
+
+<!-- ============================================================
+     セクション8：よくある質問（不安解消①）
+     ============================================================ -->
+<section class=&quot;sec sec--alt&quot;>
+  <div class=&quot;container&quot;>
+    <div class=&quot;anno&quot;>
+      <span class=&quot;anno__num&quot;>08</span>
+      <span class=&quot;anno__name&quot;>よくある質問</span>
+      <span class=&quot;anno__tag&quot;>心理：不安解消</span>
+      <span class=&quot;anno__tag anno__tag--p3&quot;>補足</span>
+      <span class=&quot;anno__tag&quot;>CTAなし</span>
+      <span class=&quot;anno__tag&quot;>画像なし</span>
+      <span class=&quot;anno__count&quot;>見出し17字／本文なし（Q&amp;amp;A 4件）</span>
+    </div>
+
+    <h2 class=&quot;h2&quot;>気になることは、先にお答えします。</h2>
+    <p class=&quot;lead&quot;>購入前に知っておきたいこと。</p>
+
+    <div class=&quot;faq&quot;>
+      <div class=&quot;faq__item&quot;>
+        <p class=&quot;faq__q&quot;>Q. 電気代の目安は？</p>
+        <p class=&quot;faq__a&quot;>A. 標準運転で1時間あたり約0.3円です。<span class=&quot;todo&quot;>実測条件の明記が要確認</span></p>
+      </div>
+      <div class=&quot;faq__item&quot;>
+        <p class=&quot;faq__q&quot;>Q. フィルター交換の頻度は？</p>
+        <p class=&quot;faq__a&quot;>A. 目安として2〜3ヶ月に1回です（使用状況により変動）。</p>
+      </div>
+      <div class=&quot;faq__item&quot;>
+        <p class=&quot;faq__q&quot;>Q. Wi-Fiがない環境でも使えますか？</p>
+        <p class=&quot;faq__a&quot;>A. 手動での加湿機能は使用できますが、アプリ連携機能は利用できません。</p>
+      </div>
+      <div class=&quot;faq__item&quot;>
+        <p class=&quot;faq__q&quot;>Q. どのくらいの広さの部屋に向いていますか？</p>
+        <p class=&quot;faq__a&quot;>A. 目安は〜12畳です。15畳を超える部屋では、加湿力が不足する場合があります。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     セクション9：保証・スペック（不安解消②）
+     ============================================================ -->
+<section class=&quot;sec&quot;>
+  <div class=&quot;container&quot;>
+    <div class=&quot;anno&quot;>
+      <span class=&quot;anno__num&quot;>09</span>
+      <span class=&quot;anno__name&quot;>保証とスペック</span>
+      <span class=&quot;anno__tag&quot;>心理：不安解消</span>
+      <span class=&quot;anno__tag anno__tag--p3&quot;>補足</span>
+      <span class=&quot;anno__tag&quot;>CTAなし</span>
+      <span class=&quot;anno__tag&quot;>画像なし</span>
+      <span class=&quot;anno__count&quot;>見出し15字／本文44字</span>
+    </div>
+
+    <h2 class=&quot;h2&quot;>安心して、試していただくために。</h2>
+    <p class=&quot;lead&quot;>万が一のときも、サポートします。</p>
+    <p class=&quot;body&quot;>NAGIには、購入後30日間の返品保証と、1年間のメーカー保証がついています。</p>
+
+    <div class=&quot;grid-2&quot; style=&quot;margin-top:var(--sp-32)&quot;>
+      <div class=&quot;card&quot;><p class=&quot;card__n&quot;>保証01</p><p class=&quot;card__t&quot;>購入後30日間の返品保証</p></div>
+      <div class=&quot;card&quot;><p class=&quot;card__n&quot;>保証02</p><p class=&quot;card__t&quot;>1年間のメーカー保証</p></div>
+    </div>
+
+    <h3 class=&quot;h3&quot; style=&quot;margin-top:var(--sp-48)&quot;>スペック</h3>
+    <table class=&quot;spec&quot;>
+      <tbody>
+        <tr><th>サイズ</th><td>W140 × D140 × H280 mm</td></tr>
+        <tr><th>重量</th><td>約1.1kg（水を入れない状態）</td></tr>
+        <tr><th>タンク容量</th><td>2.5L（満水で約20時間連続運転）</td></tr>
+        <tr><th>静音性</th><td>20dB以下（最小運転時）</td></tr>
+        <tr><th>対応通信</th><td>Wi-Fi 2.4GHz帯</td></tr>
+        <tr><th>対応アプリ</th><td>iOS 15以降／Android 11以降</td></tr>
+      </tbody>
+    </table>
+    <p class=&quot;cap&quot; style=&quot;margin-top:var(--sp-16)&quot;><span class=&quot;todo&quot;>量産版の実仕様との整合が要確認</span></p>
+  </div>
+</section>
+
+<!-- ============================================================
+     セクション10：最終CTA・問い合わせ（行動）
+     ============================================================ -->
+<section class=&quot;sec sec--strong sec--alt&quot;>
+  <div class=&quot;container&quot;>
+    <div class=&quot;anno&quot;>
+      <span class=&quot;anno__num&quot;>10</span>
+      <span class=&quot;anno__name&quot;>購入・お問い合わせ</span>
+      <span class=&quot;anno__tag&quot;>心理：行動</span>
+      <span class=&quot;anno__tag anno__tag--p1&quot;>最重要</span>
+      <span class=&quot;anno__tag&quot;>CTA④ あり</span>
+      <span class=&quot;anno__count&quot;>見出し15字／本文61字</span>
+    </div>
+
+    <div class=&quot;grid-2&quot;>
+      <div>
+        <h2 class=&quot;h2&quot;>今日から、部屋の空気を変える。</h2>
+        <p class=&quot;lead&quot;>NAGIと、心地よい湿度を。</p>
+        <p class=&quot;body&quot;>価格は12,800円（税込）、送料800円です。30日間の返品保証もありますので、まずは試してみてください。</p>
+
+        <div class=&quot;cta&quot;>
+          <a href=&quot;#&quot; class=&quot;cta__btn&quot;>NAGIを購入する</a>
+          <p class=&quot;cta__sub&quot;>遷移先：自社ECサイト（Shopify）商品購入ページ</p>
+        </div>
+      </div>
+
+      <div class=&quot;ph ph--4x3&quot;>
+        <span class=&quot;ph__label&quot;>商品写真の再掲</span>
+        <span class=&quot;ph__meta&quot;>ヒーローと同一、または別アングル／推奨比率 4:3<br>現物あり（流用可）</span>
+      </div>
+    </div>
+
+    <!-- 問い合わせフォーム -->
+    <div style=&quot;margin-top:var(--sp-96)&quot;>
+      <div class=&quot;anno&quot;>
+        <span class=&quot;anno__num&quot;>10-b</span>
+        <span class=&quot;anno__name&quot;>お問い合わせフォーム</span>
+        <span class=&quot;anno__tag anno__tag--p3&quot;>補足</span>
+        <span class=&quot;anno__count&quot;>購入に進めない人の受け皿／FAQ後・末尾に控えめに設置</span>
+      </div>
+
+      <h3 class=&quot;h3&quot;>ご不明な点はこちらから</h3>
+      <div class=&quot;form&quot;>
+        <div class=&quot;form__row&quot;>
+          <label class=&quot;form__label&quot;>お名前 <span class=&quot;form__req&quot;>必須</span></label>
+          <div class=&quot;form__box&quot;></div>
+        </div>
+        <div class=&quot;form__row&quot;>
+          <label class=&quot;form__label&quot;>メールアドレス <span class=&quot;form__req&quot;>必須</span></label>
+          <div class=&quot;form__box&quot;></div>
+        </div>
+        <div class=&quot;form__row&quot;>
+          <label class=&quot;form__label&quot;>お問い合わせ内容 <span class=&quot;form__req&quot;>任意</span></label>
+          <div class=&quot;form__box form__box--area&quot;></div>
+        </div>
+        <p class=&quot;cap&quot;>送信先：support@nagilab.co.jp／受付完了の自動返信あり</p>
+        <div class=&quot;cta&quot;>
+          <a href=&quot;#&quot; class=&quot;cta__btn&quot; style=&quot;background:transparent;color:var(--c-text);border:1px solid var(--c-line-mid)&quot;>送信する</a>
+          <p class=&quot;cta__sub&quot;>※補助CTA。主要CTAより弱く表示（ルールブック PART8-1）</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     フッター
+     ============================================================ -->
+<footer class=&quot;foot&quot;>
+  <div class=&quot;container&quot;>
+    <div class=&quot;anno&quot; style=&quot;background:rgba(255,255,255,.12);border-left-color:rgba(255,255,255,.4);color:rgba(255,255,255,.75)&quot;>
+      <span class=&quot;anno__name&quot; style=&quot;color:#fff&quot;>フッター（必須掲載情報）</span>
+      <span class=&quot;anno__count&quot;>01_requirements §6 準拠</span>
+    </div>
+    <p>株式会社Nagi Lab</p>
+    <ul>
+      <li>特定商取引法に基づく表記</li>
+      <li>個人情報保護方針<span class=&quot;todo&quot; style=&quot;border-color:rgba(255,255,255,.4);color:rgba(255,255,255,.7)&quot;>8月20日納品予定</span></li>
+      <li>会社概要</li>
+      <li>PSEマーク等の法定表示<span class=&quot;todo&quot; style=&quot;border-color:rgba(255,255,255,.4);color:rgba(255,255,255,.7)&quot;>認証番号が未確定</span></li>
+    </ul>
+  </div>
+</footer>
+
+<!-- SP固定CTA -->
+<div class=&quot;sticky&quot;>
+  <a href=&quot;#&quot; class=&quot;cta__btn&quot;>NAGIを購入する</a>
+  <p class=&quot;sticky__note&quot;>スマホのみ表示（04_design-system §5）／一定スクロール後に表示する想定</p>
+</div>
+
+<script>
+  // 親ビューアからの注釈ON/OFF切替を受け取る
+  window.addEventListener('message', function (e) {
+    if (e.data &amp;&amp; e.data.type === 'toggle-anno') {
+      document.body.classList.toggle('no-anno', !e.data.show);
+    }
+  });
+</script>
+
+</body>
+</html>
+" title="スマホ版ワイヤーフレーム"></iframe>
+        </div>
+      </div>
+    </div>
+
+    <footer class="wfv__foot">
+      <span>ブレークポイント：〜767px（スマホ）／768〜1023px（タブレット）／1024px〜（PC）</span>
+      <span>CTAは全4箇所：ヒーロー／特徴紹介後／実績後／ページ末尾（01_requirements・04_design-system 準拠）</span>
+    </footer>
+
+  </div>
+</div>
+
+<script>
+(function () {
+  var stage  = document.getElementById('wfv-stage');
+  var frames = stage.querySelectorAll('iframe');
+  var scale  = 0.58;
+
+  document.querySelectorAll('.wfv__btn[data-view]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      document.querySelectorAll('.wfv__btn[data-view]').forEach(function (o) {
+        o.setAttribute('aria-pressed', String(o === b));
+      });
+      stage.dataset.view = b.dataset.view;
+    });
+  });
+
+  var annoBtn = document.getElementById('wfv-anno');
+  var annoOn = true;
+  annoBtn.addEventListener('click', function () {
+    annoOn = !annoOn;
+    annoBtn.setAttribute('aria-pressed', String(annoOn));
+    annoBtn.textContent = annoOn ? '注釈を表示中' : '注釈を非表示';
+    frames.forEach(function (f) {
+      try {
+        f.contentDocument.body.classList.toggle('no-anno', !annoOn);
+      } catch (e) { /* srcdoc は同一オリジン扱いだが念のため */ }
+    });
+  });
+
+  function apply() { document.documentElement.style.setProperty('--scale', scale); }
+  document.getElementById('wfv-in').addEventListener('click', function () {
+    scale = Math.min(1, scale + 0.08); apply();
+  });
+  document.getElementById('wfv-out').addEventListener('click', function () {
+    scale = Math.max(0.28, scale - 0.08); apply();
+  });
+  apply();
+})();
+</script>
