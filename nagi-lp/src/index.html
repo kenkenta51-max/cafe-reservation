@@ -8,7 +8,7 @@
 <meta name="description" content="インテリアに馴染むミニマルなデザインと、スマホで完結する湿度管理を両立したスマート加湿器NAGI。20dB以下の静音設計。12,800円（税込）・30日間返品保証。">
 <link rel="canonical" href="https://nagilab.co.jp/pages/nagi">
 <meta name="robots" content="index,follow">
-<meta name="theme-color" content="#2F4A3E">
+<meta name="theme-color" content="#4A362A">
 
 <!-- OGP -->
 <meta property="og:type" content="product">
@@ -40,21 +40,24 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  /* ---- カラー（04_design-system §1） ---- */
-  --c-base:    #FAFAF8;  /* オフホワイト  ベース 約60% */
-  /* ミストグレー。ベージュ地では 4.20:1 と本文基準に届かないため、
-     テキストには使わず罫線・図解などの非テキスト要素に限定する */
+  /* ---- カラー（04_design-system §1／2026年8月2日改訂）----
+     グレー×ディープグリーンから、ウォールナットブラウン×真鍮ベージュへ変更。
+     括弧内は実測コントラスト比 */
+  --c-base:    #F7F2EA;  /* ウォームホワイト ベース 約60% */
+  /* ミストグレー。テキストには使わず罫線・図解などの非テキスト要素に限定 */
   --c-main:    #6B7280;
-  --c-key:     #2F4A3E;  /* ディープグリーン キー 約10% */
-  --c-sub:     #C9BBA0;  /* サンドベージュ  サブ 約10% */
-  --c-text:    #23272A;  /* ダークグレー   本文・見出し */
-  --c-muted:   #5F6B66;  /* 補助テキスト（04改訂済み。ベージュ地 4.76:1） */
+  --c-key:     #4A362A;  /* ウォールナットブラウン キー 約12%（白文字 11.34:1） */
+  /* 真鍮ベージュ。ウォームホワイト地で 2.38:1 のため
+     04 §1 の指定どおり本文には使わず、罫線・装飾専用とする */
+  --c-sub:     #B69B6E;
+  --c-text:    #2B2420;  /* ウォームブラック 本文・見出し（13.70:1） */
+  --c-muted:   #5F6B66;  /* 補助テキスト（ベージュ地 4.76:1） */
 
   /* 派生色。新規の色相は増やさない */
-  --c-beige-bg: #F2EDE3; /* サンドベージュをベースへ寄せた地 */
-  --c-key-hi:   #3A5C4D; /* キーの明度+10%（ホバー） */
-  --c-line:     #E2E1DC; /* ベースに対するヘアライン */
-  --c-key-deep: #24382E; /* キーより暗い面。フッター用 */
+  --c-beige-bg: #F2EDE3; /* 強み地。セクション背景の切り替えのみ */
+  --c-key-hi:   #5C4A3F; /* キーの明度+10%（ホバー。白文字 8.38:1） */
+  --c-line:     #E1DAD1; /* ベースに対するヘアライン */
+  --c-key-deep: #35271E; /* キーより暗い面。フッター用（白文字 14.38:1） */
 
   /* ---- 余白スケール（04 §3。この9値以外は使わない） ---- */
   --sp-4: 4px; --sp-8: 8px; --sp-12: 12px; --sp-16: 16px;
@@ -198,7 +201,9 @@ img { max-width: 100%; height: auto; display: block; }
   display: flex; align-items: flex-start; gap: var(--sp-24);
   padding-block: var(--sp-24); border-bottom: 1px solid var(--c-line);
 }
-.pain__n { font-size: 13px; font-weight: 700; color: var(--c-sub); font-variant-numeric: tabular-nums; padding-top: var(--sp-4); }
+/* 番号は文字なので真鍮ベージュ（2.38:1）は使えない。
+   04 §1「真鍮ベージュは本文への使用不可」に従い補助グレーを使う */
+.pain__n { font-size: 13px; font-weight: 700; color: var(--c-muted); font-variant-numeric: tabular-nums; padding-top: var(--sp-4); }
 .pain__t { font-size: 20px; font-weight: 700; line-height: 1.5; }
 
 /* ---------------------------------------------------------------------------
