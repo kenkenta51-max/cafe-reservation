@@ -19,7 +19,7 @@
 <meta property="og:image" content="https://nagilab.co.jp/pages/nagi/images/ogp.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="ディープグリーンのスマート加湿器NAGIと、キャッチコピー「置いているだけで、部屋が整う加湿器。」">
+<meta property="og:image:alt" content="ウォームグレーのスマート加湿器NAGIと、キャッチコピー「置いているだけで、部屋が整う加湿器。」">
 <meta property="og:locale" content="ja_JP">
 <meta name="twitter:card" content="summary_large_image">
 
@@ -124,6 +124,7 @@ img { max-width: 100%; height: auto; display: block; }
 /* 意味のまとまりで折り返すための塊。語中での改行を防ぐ（PART6-4） */
 .nb { display: inline-block; }
 
+.mt-12 { margin-top: var(--sp-12); }
 .mt-16 { margin-top: var(--sp-16); }
 .mt-24 { margin-top: var(--sp-24); }
 .mt-48 { margin-top: var(--sp-48); }
@@ -259,6 +260,8 @@ img { max-width: 100%; height: auto; display: block; }
    7. 選ばれる理由・実績
    ------------------------------------------------------------------------- */
 .reason__grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-64); align-items: start; }
+.cf-figure { margin: 0; }
+.cf-figure img { width: 100%; border-radius: var(--radius); border: 1px solid var(--c-line); }
 /* 実績数値。カード化せず罫線で区切る（PART15-1「全要素のカード化」を回避） */
 .stats { margin-top: var(--sp-48); border-top: 1px solid var(--c-sub); }
 .stat {
@@ -541,14 +544,14 @@ img { max-width: 100%; height: auto; display: block; }
       <figure class="fv__figure">
         <picture>
           <source type="image/webp"
-                  srcset="../public/images/product-white-640.webp 640w,
-                          ../public/images/product-white-1024.webp 1024w"
+                  srcset="../public/images/product-white-v2-640.webp 640w,
+                          ../public/images/product-white-v2-1024.webp 1024w"
                   sizes="(max-width: 767px) 100vw, (max-width: 1023px) 460px, 44vw">
-          <img src="../public/images/product-white-1024.jpg"
-               srcset="../public/images/product-white-640.jpg 640w,
-                       ../public/images/product-white-1024.jpg 1024w"
+          <img src="../public/images/product-white-v2-1024.jpg"
+               srcset="../public/images/product-white-v2-640.jpg 640w,
+                       ../public/images/product-white-v2-1024.jpg 1024w"
                sizes="(max-width: 767px) 100vw, (max-width: 1023px) 460px, 44vw"
-               alt="ディープグリーンのスマート加湿器NAGI本体。上部の吹出口からミストが立ちのぼっている"
+               alt="ウォームグレーのスマート加湿器NAGI本体。ウォームホワイトの背景に置かれ、上部の吹出口からミストが立ちのぼっている"
                width="1024" height="1365" fetchpriority="high" decoding="async">
         </picture>
       </figure>
@@ -606,11 +609,11 @@ img { max-width: 100%; height: auto; display: block; }
       <ul class="colors reveal" style="list-style:none">
         <li class="color">
           <picture>
-            <source type="image/webp" srcset="../public/images/product-white-640.webp"
+            <source type="image/webp" srcset="../public/images/product-white-v2-640.webp"
                     sizes="(max-width: 767px) 100vw, 340px">
-            <img src="../public/images/product-white-640.jpg"
+            <img src="../public/images/product-white-v2-640.jpg"
                  sizes="(max-width: 767px) 100vw, 340px"
-                 alt="ディープグリーンのNAGI本体"
+                 alt="ウォームグレーのNAGI本体"
                  width="640" height="853" loading="lazy" decoding="async"
                  style="aspect-ratio:1/1;object-fit:cover;object-position:center 42%">
           </picture>
@@ -725,19 +728,19 @@ img { max-width: 100%; height: auto; display: block; }
 
       <div class="app__shots reveal">
         <picture>
-          <source type="image/webp" srcset="../public/images/product-white-640.webp"
+          <source type="image/webp" srcset="../public/images/product-white-v2-640.webp"
                   sizes="(max-width: 767px) 56vw, (max-width: 1023px) 246px, 27vw">
-          <img src="../public/images/product-white-640.jpg"
+          <img src="../public/images/product-white-v2-640.jpg"
                sizes="(max-width: 767px) 56vw, (max-width: 1023px) 246px, 27vw"
-               alt="NAGI本体。ディープグリーンの円筒形で、上部からミストが出ている"
+               alt="NAGI本体。ウォームグレーの円筒形で、上部からミストが出ている"
                width="640" height="853" loading="lazy" decoding="async">
         </picture>
         <picture>
-          <source type="image/webp" srcset="../public/images/app-screen-480.webp"
+          <source type="image/webp" srcset="../public/images/app-screen-v2-480.webp"
                   sizes="(max-width: 767px) 41vw, (max-width: 1023px) 181px, 20vw">
-          <img src="../public/images/app-screen-480.jpg"
+          <img src="../public/images/app-screen-v2-480.jpg"
                sizes="(max-width: 767px) 41vw, (max-width: 1023px) 181px, 20vw"
-               alt="NAGI専用アプリの画面。現在の湿度52%、自動運転オン、おやすみモード、フィルター残量が表示されている"
+               alt="NAGI専用アプリの画面（ウォールナットブラウン基調）。現在の湿度52%、自動運転オン、おやすみモード、通知設定、フィルター残量が表示されている"
                width="480" height="853" loading="lazy" decoding="async">
         </picture>
       </div>
@@ -762,16 +765,16 @@ img { max-width: 100%; height: auto; display: block; }
       <figure class="scene__figure reveal">
         <picture>
           <source type="image/webp"
-                  srcset="../public/images/lifestyle-640.webp 640w,
-                          ../public/images/lifestyle-1024.webp 1024w,
-                          ../public/images/lifestyle-1536.webp 1536w"
+                  srcset="../public/images/lifestyle-v2-640.webp 640w,
+                          ../public/images/lifestyle-v2-1024.webp 1024w,
+                          ../public/images/lifestyle-v2-1536.webp 1536w"
                   sizes="(max-width: 767px) 100vw, (max-width: 1279px) 92vw, 1076px">
-          <img src="../public/images/lifestyle-1024.jpg"
-               srcset="../public/images/lifestyle-640.jpg 640w,
-                       ../public/images/lifestyle-1024.jpg 1024w,
-                       ../public/images/lifestyle-1536.jpg 1536w"
+          <img src="../public/images/lifestyle-v2-1024.jpg"
+               srcset="../public/images/lifestyle-v2-640.jpg 640w,
+                       ../public/images/lifestyle-v2-1024.jpg 1024w,
+                       ../public/images/lifestyle-v2-1536.jpg 1536w"
                sizes="(max-width: 767px) 100vw, (max-width: 1279px) 92vw, 1076px"
-               alt="木製デスクの上に置かれたNAGI。ノートパソコンとマグカップ、観葉植物が並ぶ在宅ワークの一場面"
+               alt="木製サイドテーブルに置かれたNAGI。クッションや観葉植物のある、暖色照明のリビングの一場面"
                width="1536" height="1024" loading="lazy" decoding="async">
         </picture>
         <figcaption class="cap scene__cap">在宅ワークのデスクにも、家電らしさを感じさせず馴染みます。</figcaption>
@@ -807,24 +810,30 @@ img { max-width: 100%; height: auto; display: block; }
       </div>
 
       <!-- ===================================================================
-           TODO［公開前に必須］クラウドファンディング公式ページのキャプチャ画像。
+           TODO［公開前に必須］本画像（nagi_cf_summary_mock.png）は架空データ
+           による仮素材であり、実績の「証拠」画像としては機能しない。
+           サンプル制作用のモックアップとして暫定的に掲載している。
 
-           これは実績の「証拠」画像であり、他の画像で代用してはならない。
-           掲載許可の確認後、実物のキャプチャに必ず差し替えること。
-           差し替えるまでこのセクションの実績数値は出典を示せていない状態になる。
+           掲載許可の確認後、実物のクラウドファンディングページのキャプチャに
+           必ず差し替えること。差し替えるまでこのセクションの実績数値は
+           出典を示せていない状態になる。
            （docs/02_strategy.md §5、docs/06_copy.md 確認事項No.1 を参照）
            =================================================================== -->
-      <div class="reveal">
-        <div class="ph ph--4x3">
-          <span class="ph__label">クラウドファンディング公式ページのキャプチャ</span>
-          <span class="ph__note">
-            支援者512名・支援総額8,942,000円の根拠画像<br>
-            掲載許可の確認後、実物に差し替え（公開前に必須）<br>
-            推奨比率 4:3
-          </span>
-        </div>
-        <p class="cap mt-16">実績数値の出典として、公式ページのキャプチャを掲載予定です。</p>
-      </div>
+      <figure class="reveal cf-figure">
+        <picture>
+          <source type="image/webp"
+                  srcset="../public/images/cf-summary-600.webp 600w,
+                          ../public/images/cf-summary-1201.webp 1201w"
+                  sizes="(max-width: 767px) 100vw, (max-width: 1023px) 460px, 46vw">
+          <img src="../public/images/cf-summary-1201.jpg"
+               srcset="../public/images/cf-summary-600.jpg 600w,
+                       ../public/images/cf-summary-1201.jpg 1201w"
+               sizes="(max-width: 767px) 100vw, (max-width: 1023px) 460px, 46vw"
+               alt="クラウドファンディング実績サマリーのイメージ。支援総額8,942,000円、支援者512名、目標金額に対し447%達成。サンプル制作用の架空データによるモックアップで、実在の支援プラットフォームの画面ではない"
+               width="1201" height="801" loading="lazy" decoding="async">
+        </picture>
+        <figcaption class="cap mt-12">出典：クラウドファンディング公式ページ（掲載許可の確認後にキャプチャ掲載）</figcaption>
+      </figure>
     </div>
   </section>
 
