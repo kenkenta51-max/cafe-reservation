@@ -211,21 +211,24 @@ img { max-width: 100%; height: auto; display: block; }
    3. 価値提案（カラーバリエーション）
    ------------------------------------------------------------------------- */
 .colors { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--sp-32); margin-top: var(--sp-48); }
-.color__name { font-size: 15px; font-weight: 700; margin-top: var(--sp-12); }
-.color__note { font-size: 12px; color: var(--c-muted); margin-top: var(--sp-4); }
-.color img { width: 100%; border-radius: var(--radius); }
-
-/* 素材未支給のプレースホルダ。本番前に実写へ差し替える */
-.ph {
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  gap: var(--sp-8); padding: var(--sp-24); text-align: center;
-  background: #EDEDEA; border: 2px dashed var(--c-main); border-radius: var(--radius);
-  color: #4A5350;
+/* 3枚とも木目テクスチャを背景に適用。写真の周囲に余白を持たせ、テキストは
+   半透明パネル（.color__caption）に載せてコントラスト4.5:1以上を確保する */
+.color {
+  padding: var(--sp-16);
+  border-radius: var(--radius);
+  background-image: url('../public/images/wood-texture-bg-960.webp');
+  background-size: cover;
+  background-position: center;
 }
-.ph__label { font-size: 14px; font-weight: 700; }
-.ph__note  { font-size: 12px; line-height: 1.6; }
-.ph--1x1 { aspect-ratio: 1 / 1; }
-.ph--4x3 { aspect-ratio: 4 / 3; }
+.color__caption {
+  margin-top: var(--sp-12);
+  padding: var(--sp-8) var(--sp-12);
+  background: rgba(247, 242, 234, .92);
+  border-radius: var(--radius);
+}
+.color__name { font-size: 15px; font-weight: 700; }
+.color__note { font-size: 12px; color: var(--c-muted); margin-top: var(--sp-4); }
+.color img { width: 100%; border-radius: var(--radius); display: block; }
 
 /* ---------------------------------------------------------------------------
    4. 主な特徴
@@ -607,43 +610,61 @@ img { max-width: 100%; height: auto; display: block; }
       </div>
 
       <ul class="colors reveal" style="list-style:none">
+        <!-- TODO［公開前に必須］本カードの写真（nagi_product_white_02.png）はAI生成の
+             仮素材。実測RGB(177,157,138)は暖色系のグレージュで、緑の要素を含まない。
+             「ディープグリーン」はクライアント支給の商品プロフィール（inputs/02_client_materials/
+             nagi_company_product_profile.md）に基づく正式なカラー名だが、この仮素材は
+             その色を正確に再現できていない。公開前に実物のディープグリーン商品写真へ
+             差し替えること。 -->
         <li class="color">
           <picture>
             <source type="image/webp" srcset="../public/images/product-white-v2-640.webp"
                     sizes="(max-width: 767px) 100vw, 340px">
             <img src="../public/images/product-white-v2-640.jpg"
                  sizes="(max-width: 767px) 100vw, 340px"
-                 alt="ウォームグレーのNAGI本体"
+                 alt="ディープグリーン想定のNAGI本体（仮素材）"
                  width="640" height="853" loading="lazy" decoding="async"
                  style="aspect-ratio:1/1;object-fit:cover;object-position:center 42%">
           </picture>
-          <p class="color__name">ディープグリーン</p>
-          <p class="color__note">撮影済み</p>
+          <div class="color__caption">
+            <p class="color__name">ディープグリーン</p>
+            <p class="color__note">サンプル画像（実物と色味が異なります）</p>
+          </div>
         </li>
 
-        <!-- TODO［素材未支給］ミストグレーの商品写真。
-             実物写真のない色を他画像で代用しないため、プレースホルダのまま。
-             撮影後に <img> へ差し替えること。 -->
         <li class="color">
-          <div class="ph ph--1x1">
-            <span class="ph__label">ミストグレー</span>
-            <span class="ph__note">商品写真 未撮影<br>1:1 で差し替え</span>
+          <picture>
+            <source type="image/webp" srcset="../public/images/product-mistgray-640.webp"
+                    sizes="(max-width: 767px) 100vw, 340px">
+            <img src="../public/images/product-mistgray-640.jpg"
+                 sizes="(max-width: 767px) 100vw, 340px"
+                 alt="ミストグレーのNAGI本体"
+                 width="640" height="853" loading="lazy" decoding="async"
+                 style="aspect-ratio:1/1;object-fit:cover;object-position:center 42%">
+          </picture>
+          <div class="color__caption">
+            <p class="color__name">ミストグレー</p>
+            <p class="color__note">サンプル画像</p>
           </div>
-          <p class="color__name">ミストグレー</p>
-          <p class="color__note">撮影待ち</p>
         </li>
 
-        <!-- TODO［素材未支給］サンドベージュの商品写真。上記と同じ扱い。 -->
         <li class="color">
-          <div class="ph ph--1x1">
-            <span class="ph__label">サンドベージュ</span>
-            <span class="ph__note">商品写真 未撮影<br>1:1 で差し替え</span>
+          <picture>
+            <source type="image/webp" srcset="../public/images/product-sandbeige-640.webp"
+                    sizes="(max-width: 767px) 100vw, 340px">
+            <img src="../public/images/product-sandbeige-640.jpg"
+                 sizes="(max-width: 767px) 100vw, 340px"
+                 alt="サンドベージュのNAGI本体"
+                 width="640" height="853" loading="lazy" decoding="async"
+                 style="aspect-ratio:1/1;object-fit:cover;object-position:center 42%">
+          </picture>
+          <div class="color__caption">
+            <p class="color__name">サンドベージュ</p>
+            <p class="color__note">サンプル画像</p>
           </div>
-          <p class="color__name">サンドベージュ</p>
-          <p class="color__note">撮影待ち</p>
         </li>
       </ul>
-      <p class="cap mt-16">全3色展開。ミストグレーとサンドベージュの商品写真は撮影後に掲載します。</p>
+      <p class="cap mt-16">全3色展開。掲載画像はサンプル制作用の仮素材のため、公開前に実物の商品写真へ差し替えます。</p>
     </div>
   </section>
 
