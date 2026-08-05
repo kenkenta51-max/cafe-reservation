@@ -68,24 +68,45 @@
   --sec-pad: var(--sp-96);
   --sec-pad-lg: 140px;
 
-  --radius: 4px;   /* 角丸は1段階のみ */
+  --radius: 4px;      /* 信頼・堅実の基準（PART10-2） */
+  --radius-lg: 8px;   /* カード用の2段階目。案件内は2段階までに限定（PART10-2） */
 
   --dur: 240ms;
+  --dur-fast: 150ms;
+  --dur-hover: 200ms;
   --ease: cubic-bezier(.22, .61, .36, 1);
+
+  /* セクション間に木目背景をのぞかせる継ぎ目の幅（PART10-3「薄く・広く」） */
+  --seam: 6px;
 }
 
 html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+
+/* 固定ナビの高さぶん、アンカー先の見出しが隠れないようにする */
+#features, #app, #reason, #faq, #purchase, #contact { scroll-margin-top: 88px; }
 
 body {
   /* Webフォント未読込。STEP8で Noto Sans JP の self-host woff2 へ差し替え予定 */
   font-family: 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', 'Noto Sans JP',
                'Yu Gothic Medium', 'Yu Gothic', system-ui, sans-serif;
-  background: var(--c-base);
   color: var(--c-text);
   font-size: 16px;
   line-height: 1.8;
   font-feature-settings: "palt";
   overflow-x: hidden;
+  /* ページ全体の木目実写背景。各セクションは不透明な背景を持つため、
+     木目はセクション間の継ぎ目（--seam）でのみのぞく。装飾用途のため
+     <img>ではなくCSS背景として実装し、スクリーンリーダーに読ませない */
+  background-color: var(--c-base);
+  background-image: url('../public/images/wood-bg-photo-800.webp');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+@supports (-webkit-touch-callout: none) {
+  /* iOS Safariはbackground-attachment:fixedの描画負荷が高いためscrollに戻す */
+  body { background-attachment: scroll; }
 }
 
 img { max-width: 100%; height: auto; display: block; }
@@ -107,6 +128,12 @@ img { max-width: 100%; height: auto; display: block; }
   margin-inline: auto; padding-inline: var(--sp-32);
 }
 .container--narrow { max-width: 800px; }
+
+/* main直下のブロック同士の継ぎ目に、bodyの木目背景を薄くのぞかせる。
+   各ブロックは不透明背景を持つため、文字が木目に直接乗ることはない */
+main > * + * { margin-top: var(--seam); }
+.nav { margin-bottom: var(--seam); }
+.foot { margin-top: var(--seam); }
 
 /* ---------------------------------------------------------------------------
    タイポグラフィ（04 §2）
@@ -132,7 +159,7 @@ img { max-width: 100%; height: auto; display: block; }
 /* ---------------------------------------------------------------------------
    セクション共通
    ------------------------------------------------------------------------- */
-.sec        { padding-block: var(--sec-pad); }
+.sec        { padding-block: var(--sec-pad); background: var(--c-base); }
 .sec--lg    { padding-block: var(--sec-pad-lg); }
 .sec--beige { background: var(--c-beige-bg); }
 .sec--key   { background: var(--c-key); color: #fff; }
@@ -141,6 +168,17 @@ img { max-width: 100%; height: auto; display: block; }
    読み幅の制御は .body / .lead 側で行う（PART6-4） */
 .sec__head { max-width: 46em; }
 .sec__head .lead { max-width: 34em; }
+
+/* 画像hover：写真セクション共通（PART10-3「薄く」の範囲で控えめに） */
+.fv__figure img, .color img, .pain__figure img, .scene__figure img,
+.app__shots img, .cf-figure img {
+  transition: transform var(--dur-hover) var(--ease), box-shadow var(--dur-hover) var(--ease);
+}
+.fv__figure img:hover, .color img:hover, .pain__figure img:hover, .scene__figure img:hover,
+.app__shots img:hover, .cf-figure img:hover {
+  transform: scale(1.02);
+  box-shadow: 0 4px 16px rgba(43, 36, 32, .12);
+}
 
 /* ---------------------------------------------------------------------------
    ボタン（04 §5）
@@ -151,14 +189,15 @@ img { max-width: 100%; height: auto; display: block; }
   border: 1px solid transparent; border-radius: var(--radius);
   font-family: inherit; font-size: 17px; font-weight: 700; line-height: 1.4;
   text-decoration: none; cursor: pointer;
-  transition: background-color var(--dur) var(--ease), color var(--dur) var(--ease);
+  transition: background-color var(--dur) var(--ease), color var(--dur) var(--ease),
+              transform var(--dur-hover) var(--ease);
 }
 .btn--primary { background: var(--c-key); color: #fff; }
-.btn--primary:hover { background: var(--c-key-hi); }
+.btn--primary:hover { background: var(--c-key-hi); transform: scale(1.03); }
 
 /* キー色ベタ地の上：白ベタ＋キー色文字（04のCTA色は明るい地が前提のため反転） */
 .btn--onkey { background: #fff; color: var(--c-key); }
-.btn--onkey:hover { background: var(--c-beige-bg); }
+.btn--onkey:hover { background: var(--c-beige-bg); transform: scale(1.03); }
 
 /* 補助CTA。主要CTAより弱く表示する（PART8-1） */
 .btn--ghost { background: transparent; color: var(--c-text); border-color: var(--c-main); }
@@ -167,22 +206,52 @@ img { max-width: 100%; height: auto; display: block; }
 .btn__price { font-size: 14px; font-weight: 400; margin-left: var(--sp-8); opacity: .9; }
 
 /* ---------------------------------------------------------------------------
-   ヘッダー
+   ナビゲーション（スクロール追従・固定）
    ------------------------------------------------------------------------- */
-.head { padding-block: var(--sp-24); }
-.head__inner { display: flex; align-items: center; justify-content: space-between; gap: var(--sp-16); }
+.nav {
+  position: sticky; top: 0; z-index: 50;
+  padding-block: var(--sp-16);
+  background: var(--c-base);
+  border-bottom: 1px solid var(--c-line);
+}
+.nav__inner { display: flex; align-items: center; justify-content: space-between; gap: var(--sp-24); }
 /* 独立したリンクはタップ領域44px以上を確保する（04 §5・PART12-2） */
 .logo {
   display: inline-flex; align-items: center; min-height: 44px;
   font-size: 20px; font-weight: 700; letter-spacing: .22em;
   color: var(--c-key); text-decoration: none;
 }
-.head__note { font-size: 13px; color: var(--c-muted); }
+.nav__menu {
+  display: flex; align-items: center; gap: var(--sp-32);
+  list-style: none;
+}
+.nav__menu a:not(.btn) {
+  position: relative;
+  display: inline-flex; align-items: center; min-height: 44px;
+  font-size: 14px; font-weight: 700; color: var(--c-text); text-decoration: none;
+}
+/* ナビリンクのホバー：下線アニメーション */
+.nav__menu a:not(.btn)::after {
+  content: ""; position: absolute; left: 0; right: 100%; bottom: 10px;
+  height: 2px; background: var(--c-key);
+  transition: right var(--dur-fast) var(--ease);
+}
+.nav__menu a:not(.btn):hover::after,
+.nav__menu a:not(.btn):focus-visible::after { right: 0; }
+.nav__cta { min-height: 44px; padding: var(--sp-8) var(--sp-24); font-size: 14px; }
+
+.nav__toggle {
+  display: none;
+  align-items: center; justify-content: center;
+  width: 44px; height: 44px;
+  background: transparent; border: 0; border-radius: var(--radius);
+  color: var(--c-key); cursor: pointer;
+}
 
 /* ---------------------------------------------------------------------------
    1. ファーストビュー
    ------------------------------------------------------------------------- */
-.fv { padding-block: var(--sp-64) var(--sec-pad-lg); }
+.fv { padding-block: var(--sp-64) var(--sec-pad-lg); background: var(--c-base); }
 .fv__grid { display: grid; grid-template-columns: 1.15fr .85fr; gap: var(--sp-64); align-items: center; }
 .fv__cta { margin-top: var(--sp-48); }
 /* 現素材の背景は純白ではなくベース地に溶け込まないため写真パネルとして扱う。
@@ -195,13 +264,22 @@ img { max-width: 100%; height: auto; display: block; }
 .trust li + li { padding-left: var(--sp-16); border-left: 1px solid var(--c-line); }
 
 /* ---------------------------------------------------------------------------
-   2. 悩みの提示（画像を使わずテキストのみで構成）
+   2. 悩みの提示
    ------------------------------------------------------------------------- */
-.pains { margin-top: var(--sp-48); border-top: 1px solid var(--c-line); }
+.pain__grid { display: grid; grid-template-columns: 1.2fr .8fr; column-gap: var(--sp-64); }
+.pain__figure { grid-column: 2; grid-row: 1 / span 2; margin: 0; align-self: start; }
+.pain__figure img { width: 100%; border-radius: var(--radius-lg); }
+
+.pains { grid-column: 1; margin-top: var(--sp-32); display: flex; flex-direction: column; gap: var(--sp-16); }
+/* カードパネル化（PART10-1・10-3「薄く・広く・目立たせすぎない」） */
 .pain {
   display: flex; align-items: flex-start; gap: var(--sp-24);
-  padding-block: var(--sp-24); border-bottom: 1px solid var(--c-line);
+  padding: var(--sp-24); border-radius: var(--radius-lg);
+  background: var(--c-base);
+  box-shadow: 0 2px 10px rgba(43, 36, 32, .06);
+  transition: transform var(--dur-hover) var(--ease), box-shadow var(--dur-hover) var(--ease);
 }
+.pain:hover { transform: translateY(-4px); box-shadow: 0 8px 20px rgba(43, 36, 32, .12); }
 /* 番号は文字なので真鍮ベージュ（2.38:1）は使えない。
    04 §1「真鍮ベージュは本文への使用不可」に従い補助グレーを使う */
 .pain__n { font-size: 13px; font-weight: 700; color: var(--c-muted); font-variant-numeric: tabular-nums; padding-top: var(--sp-4); }
@@ -231,10 +309,30 @@ img { max-width: 100%; height: auto; display: block; }
 .color img { width: 100%; border-radius: var(--radius); display: block; }
 
 /* ---------------------------------------------------------------------------
-   4. 主な特徴
+   4. 主な特徴（ステップ番号付き写真カード）
    ------------------------------------------------------------------------- */
-.features { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--sp-48); margin-top: var(--sp-48); }
-.feature__icon { width: 40px; height: 40px; color: var(--c-key); }
+.features { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--sp-32); margin-top: var(--sp-48); }
+.feature {
+  padding: var(--sp-16); border-radius: var(--radius-lg);
+  background: var(--c-base);
+  box-shadow: 0 2px 10px rgba(43, 36, 32, .06);
+  transition: transform var(--dur-hover) var(--ease), box-shadow var(--dur-hover) var(--ease);
+}
+.feature:hover { transform: translateY(-4px); box-shadow: 0 8px 20px rgba(43, 36, 32, .12); }
+.feature__media { position: relative; overflow: hidden; border-radius: var(--radius); }
+.feature__media img {
+  width: 100%; aspect-ratio: 1 / 1; object-fit: cover;
+  transition: transform var(--dur-hover) var(--ease);
+}
+.feature__media:hover img { transform: scale(1.02); }
+.feature__n {
+  position: absolute; top: var(--sp-12); left: var(--sp-12);
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 32px; height: 32px; padding-inline: var(--sp-8);
+  background: var(--c-key); color: #fff;
+  font-size: 13px; font-weight: 700; font-variant-numeric: tabular-nums;
+  border-radius: var(--radius);
+}
 .feature__t { font-size: 19px; font-weight: 700; line-height: 1.5; margin-top: var(--sp-16); }
 .feature__note { font-size: 14px; color: var(--c-muted); margin-top: var(--sp-4); }
 
@@ -265,14 +363,17 @@ img { max-width: 100%; height: auto; display: block; }
 .reason__grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-64); align-items: start; }
 .cf-figure { margin: 0; }
 .cf-figure img { width: 100%; border-radius: var(--radius); border: 1px solid var(--c-line); }
-/* 実績数値。カード化せず罫線で区切る（PART15-1「全要素のカード化」を回避） */
-.stats { margin-top: var(--sp-48); border-top: 1px solid var(--c-sub); }
+/* 実績数値。クライアント指示によりバッジ形式で視覚的に強調する
+   （以前は罫線区切りだったが、今回の指示で変更。数値・ラベルは原稿のまま） */
+.stats { margin-top: var(--sp-48); display: flex; flex-wrap: wrap; gap: var(--sp-16); }
 .stat {
-  display: flex; align-items: baseline; justify-content: space-between; gap: var(--sp-16);
-  padding-block: var(--sp-24); border-bottom: 1px solid var(--c-sub);
+  flex: 1 1 220px;
+  display: flex; flex-direction: column; gap: var(--sp-4);
+  padding: var(--sp-24); border-radius: var(--radius-lg);
+  background: var(--c-beige-bg); border: 1px solid var(--c-sub);
 }
-.stat__label { font-size: 14px; color: var(--c-muted); }
-.stat__value { font-size: 40px; line-height: 1.1; font-weight: 700; color: var(--c-key); font-variant-numeric: tabular-nums; }
+.stat__label { font-size: 14px; color: var(--c-muted); order: 2; }
+.stat__value { font-size: 40px; line-height: 1.1; font-weight: 700; color: var(--c-key); font-variant-numeric: tabular-nums; order: 1; }
 .stat__unit { font-size: 18px; font-weight: 700; margin-left: var(--sp-4); }
 
 /* ---------------------------------------------------------------------------
@@ -400,12 +501,15 @@ img { max-width: 100%; height: auto; display: block; }
   :root { --sec-pad: 72px; --sec-pad-lg: 104px; }
   .container { padding-inline: var(--sp-24); }
 
-  .fv__grid, .app, .reason__grid { grid-template-columns: 1fr; gap: var(--sp-48); }
+  .fv__grid, .app, .reason__grid, .pain__grid { grid-template-columns: 1fr; gap: var(--sp-48); }
   .fv__figure, .app__shots { max-width: 460px; margin-inline: auto; }
   .features { gap: var(--sp-32); }
+  .pain__figure { grid-column: 1; grid-row: auto; max-width: 460px; margin-inline: auto; order: -1; }
 
   .h1 { font-size: 44px; }
   .h2 { font-size: 32px; }
+
+  .nav__menu { gap: var(--sp-16); }
 }
 
 /* ===========================================================================
@@ -435,7 +539,7 @@ img { max-width: 100%; height: auto; display: block; }
   .colors, .features, .guarantees { grid-template-columns: 1fr; gap: var(--sp-32); }
   .pain { gap: var(--sp-16); }
   .pain__t { font-size: 17px; }
-  .stat { flex-direction: column; align-items: flex-start; gap: var(--sp-4); }
+  .stat { flex-basis: 100%; }
   .stat__value { font-size: 36px; }
   .faq__q { font-size: 16px; }
 
@@ -445,8 +549,22 @@ img { max-width: 100%; height: auto; display: block; }
   .spec th { padding: 0 0 var(--sp-4); font-size: 13px; border: 0; white-space: normal; }
   .spec td { padding: 0; border: 0; }
 
-  .head__note { display: none; }
   .foot__links { gap: var(--sp-12) var(--sp-24); }
+
+  /* ナビ：ハンバーガーメニュー。JS無効時は常時展開のリンク一覧として表示し
+     機能を失わない（PART13-3の回避と同じ考え方） */
+  .nav__inner { position: relative; }
+  .js .nav__toggle { display: inline-flex; }
+  .nav__menu { flex-wrap: wrap; row-gap: var(--sp-8); }
+  .js .nav__menu {
+    display: none; flex-direction: column; align-items: stretch;
+    position: absolute; inset-inline: 0; top: 100%;
+    background: var(--c-base); border-bottom: 1px solid var(--c-line);
+    padding: var(--sp-16); gap: var(--sp-8);
+    box-shadow: 0 8px 24px rgba(43, 36, 32, .10);
+  }
+  .js .nav__menu.is-open { display: flex; }
+  .nav__cta { width: 100%; }
 }
 
 /* ===========================================================================
@@ -463,6 +581,13 @@ img { max-width: 100%; height: auto; display: block; }
   html { scroll-behavior: auto; }
   .js .reveal { opacity: 1; transform: none; transition: none; }
   .sticky, .btn, .skip, .faq__q::after { transition: none; }
+  .btn:hover,
+  .pain:hover, .feature:hover,
+  .fv__figure img:hover, .color img:hover, .pain__figure img:hover, .scene__figure img:hover,
+  .app__shots img:hover, .cf-figure img:hover, .feature__media:hover img,
+  .nav__menu a:not(.btn)::after {
+    transform: none; transition: none;
+  }
 }
 
 @media print {
@@ -509,10 +634,26 @@ img { max-width: 100%; height: auto; display: block; }
 
 <a href="#main" class="skip">本文へスキップ</a>
 
-<header class="head">
-  <div class="container head__inner">
+<header class="nav">
+  <div class="container nav__inner">
     <a href="#" class="logo">NAGI</a>
-    <p class="head__note">株式会社Nagi Lab</p>
+
+    <button type="button" class="nav__toggle" id="nav-toggle"
+            aria-expanded="false" aria-controls="nav-menu">
+      <span class="visually-hidden">メニューを開く</span>
+      <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor"
+           stroke-width="1.8" stroke-linecap="round" aria-hidden="true" focusable="false">
+        <path d="M3 6h18M3 12h18M3 18h18"/>
+      </svg>
+    </button>
+
+    <ul class="nav__menu" id="nav-menu">
+      <li><a href="#features">特徴</a></li>
+      <li><a href="#app">アプリ連携</a></li>
+      <li><a href="#reason">選ばれる理由</a></li>
+      <li><a href="#faq">よくある質問</a></li>
+      <li><a href="#purchase" class="btn btn--primary nav__cta">購入する</a></li>
+    </ul>
   </div>
 </header>
 
@@ -563,10 +704,11 @@ img { max-width: 100%; height: auto; display: block; }
 
   <!-- =====================================================================
        2. 悩みの提示（共感）
-       画像は使わずテキストのみで構成する（クライアント確認済み）
+       以前は画像を使わずテキストのみで構成していたが、クライアントからの
+       新規指示（nagi_pain_point.png）により、見出し脇に1点添える構成へ変更
        ===================================================================== -->
   <section class="sec sec--beige" aria-labelledby="pain-title">
-    <div class="container">
+    <div class="container pain__grid">
       <div class="sec__head reveal">
         <p class="eyebrow">こんな悩みはありませんか</p>
         <h2 class="h2 mt-16" id="pain-title"><span class="nb">加湿器を置きたいのに、</span><span class="nb">置けない理由がある。</span></h2>
@@ -576,6 +718,20 @@ img { max-width: 100%; height: auto; display: block; }
           理由は「部屋に生活感が出てしまう」「手入れが面倒で続かない」という2つです。
         </p>
       </div>
+
+      <figure class="pain__figure reveal">
+        <picture>
+          <source type="image/webp" srcset="../public/images/pain-point-560.webp 560w,
+                  ../public/images/pain-point-900.webp 900w"
+                  sizes="(max-width: 767px) 100vw, (max-width: 1023px) 460px, 42vw">
+          <img src="../public/images/pain-point-900.jpg"
+               srcset="../public/images/pain-point-560.jpg 560w,
+                       ../public/images/pain-point-900.jpg 900w"
+               sizes="(max-width: 767px) 100vw, (max-width: 1023px) 460px, 42vw"
+               alt="乾いた空気の中、木製家具とやわらかな西日に包まれた静かな部屋の一角"
+               width="900" height="675" loading="lazy" decoding="async">
+        </picture>
+      </figure>
 
       <ul class="pains reveal">
         <li class="pain">
@@ -670,9 +826,14 @@ img { max-width: 100%; height: auto; display: block; }
 
   <!-- =====================================================================
        4. 主な特徴（解決策の理解②）
-       アイコンは写真素材ではなくSVGの線画で作成（クライアント確認済み）
+       ステップ番号付きの写真カード形式（クライアント指示によりSVGアイコンから変更）。
+
+       TODO：支給ファイル名と実際の写真内容が一致していなかったため、内容に合わせて
+       割り当てを入れ替えて使用している（ユーザー確認済み）。
+       ・nagi_feature_app.png  （指示：01スマホ操作 → 実際はタンク取り外しの写真）→ 03で使用
+       ・nagi_feature_tank.png （指示：03タンク　　 → 実際はアプリ操作の写真）　　→ 01で使用
        ===================================================================== -->
-  <section class="sec sec--beige" aria-labelledby="feature-title">
+  <section class="sec sec--beige" id="features" aria-labelledby="feature-title">
     <div class="container">
       <div class="sec__head reveal">
         <p class="eyebrow">3つの特徴</p>
@@ -683,35 +844,57 @@ img { max-width: 100%; height: auto; display: block; }
 
       <ul class="features reveal" style="list-style:none">
         <li class="feature">
-          <svg class="feature__icon" viewBox="0 0 40 40" fill="none" stroke="currentColor"
-               stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
-            <rect x="13" y="4" width="14" height="24" rx="3"/>
-            <path d="M18 8h4"/>
-            <path d="M20 23.5h.01"/>
-            <path d="M9 33c3-2.5 7-3.8 11-3.8S28 30.5 31 33"/>
-          </svg>
+          <div class="feature__media">
+            <span class="feature__n">01</span>
+            <picture>
+              <source type="image/webp" srcset="../public/images/feature-tank-480.webp 480w,
+                      ../public/images/feature-tank-800.webp 800w"
+                      sizes="(max-width: 767px) 100vw, (max-width: 1023px) 46vw, 28vw">
+              <img src="../public/images/feature-tank-800.jpg"
+                   srcset="../public/images/feature-tank-480.jpg 480w,
+                           ../public/images/feature-tank-800.jpg 800w"
+                   sizes="(max-width: 767px) 100vw, (max-width: 1023px) 46vw, 28vw"
+                   alt="NAGI専用アプリで湿度52%を確認しながら操作している手元。背景にはミストを出すNAGI本体"
+                   width="800" height="800" loading="lazy" decoding="async">
+            </picture>
+          </div>
           <h3 class="feature__t"><span class="nb">スマホで遠隔・</span><span class="nb">自動操作ができる</span></h3>
         </li>
 
         <li class="feature">
-          <svg class="feature__icon" viewBox="0 0 40 40" fill="none" stroke="currentColor"
-               stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
-            <path d="M6 20h4l4-7 5 14 4-9 3 4h8"/>
-            <circle cx="20" cy="20" r="15"/>
-          </svg>
+          <div class="feature__media">
+            <span class="feature__n">02</span>
+            <picture>
+              <source type="image/webp" srcset="../public/images/feature-quiet-480.webp 480w,
+                      ../public/images/feature-quiet-800.webp 800w"
+                      sizes="(max-width: 767px) 100vw, (max-width: 1023px) 46vw, 28vw">
+              <img src="../public/images/feature-quiet-800.jpg"
+                   srcset="../public/images/feature-quiet-480.jpg 480w,
+                           ../public/images/feature-quiet-800.jpg 800w"
+                   sizes="(max-width: 767px) 100vw, (max-width: 1023px) 46vw, 28vw"
+                   alt="ナイトテーブルの上でミストを出すNAGI。やわらかな照明の静かな寝室の一角"
+                   width="800" height="800" loading="lazy" decoding="async">
+            </picture>
+          </div>
           <h3 class="feature__t"><span class="nb">20dB以下の</span><span class="nb">静かな運転音</span></h3>
           <p class="feature__note">（就寝時にも配慮）</p>
         </li>
 
         <li class="feature">
-          <svg class="feature__icon" viewBox="0 0 40 40" fill="none" stroke="currentColor"
-               stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
-            <!-- 分解できる給水タンク：本体・取り外せる上部・水滴 -->
-            <path d="M12 17h16v14a4 4 0 0 1-4 4h-8a4 4 0 0 1-4-4z"/>
-            <path d="M12 24h16"/>
-            <path d="M10 17h20"/>
-            <path d="M20 4c0 0-4 5-4 7.5a4 4 0 0 0 8 0C24 9 20 4 20 4z"/>
-          </svg>
+          <div class="feature__media">
+            <span class="feature__n">03</span>
+            <picture>
+              <source type="image/webp" srcset="../public/images/feature-app-480.webp 480w,
+                      ../public/images/feature-app-800.webp 800w"
+                      sizes="(max-width: 767px) 100vw, (max-width: 1023px) 46vw, 28vw">
+              <img src="../public/images/feature-app-800.jpg"
+                   srcset="../public/images/feature-app-480.jpg 480w,
+                           ../public/images/feature-app-800.jpg 800w"
+                   sizes="(max-width: 767px) 100vw, (max-width: 1023px) 46vw, 28vw"
+                   alt="両手でNAGI上部のタンクを工具を使わずに取り外している様子"
+                   width="800" height="800" loading="lazy" decoding="async">
+            </picture>
+          </div>
           <h3 class="feature__t"><span class="nb">工具を使わず分解して</span><span class="nb">洗える抗菌タンク</span></h3>
         </li>
       </ul>
@@ -730,7 +913,7 @@ img { max-width: 100%; height: auto; display: block; }
        5. アプリ連携（解決策の理解③）
        実機とアプリ画面は合成せず、現物2枚を並べて配置（クライアント確認済み）
        ===================================================================== -->
-  <section class="sec" aria-labelledby="app-title">
+  <section class="sec" id="app" aria-labelledby="app-title">
     <div class="container app">
       <div class="reveal">
         <p class="eyebrow">スマホひとつで、湿度管理を</p>
@@ -806,7 +989,7 @@ img { max-width: 100%; height: auto; display: block; }
   <!-- =====================================================================
        7. 選ばれる理由・実績（信頼）
        ===================================================================== -->
-  <section class="sec" aria-labelledby="reason-title">
+  <section class="sec" id="reason" aria-labelledby="reason-title">
     <div class="container reason__grid">
       <div class="reveal">
         <p class="eyebrow">選ばれている理由</p>
@@ -869,7 +1052,7 @@ img { max-width: 100%; height: auto; display: block; }
   <!-- =====================================================================
        8. よくある質問（不安解消①）
        ===================================================================== -->
-  <section class="sec" aria-labelledby="faq-title">
+  <section class="sec" id="faq" aria-labelledby="faq-title">
     <div class="container">
       <div class="sec__head reveal">
         <p class="eyebrow">よくある質問</p>
@@ -943,7 +1126,7 @@ img { max-width: 100%; height: auto; display: block; }
   <!-- =====================================================================
        10. 最終CTA（行動）／ CTA④
        ===================================================================== -->
-  <section class="sec sec--lg sec--key final" aria-labelledby="final-title">
+  <section class="sec sec--lg sec--key final" id="purchase" aria-labelledby="final-title">
     <div class="container">
       <h2 class="h2" id="final-title">今日から、部屋の空気を変える。</h2>
       <p class="lead final__lead mt-16">NAGIと、心地よい湿度を。</p>
@@ -1082,6 +1265,31 @@ img { max-width: 100%; height: auto; display: block; }
   window.addEventListener('scroll', updateSticky, { passive: true });
   window.addEventListener('resize', updateSticky);
   updateSticky();
+
+  /* --- ナビのハンバーガーメニュー --- */
+  var navToggle = document.getElementById('nav-toggle');
+  var navMenu = document.getElementById('nav-menu');
+
+  function closeNavMenu() {
+    navMenu.classList.remove('is-open');
+    navToggle.setAttribute('aria-expanded', 'false');
+  }
+  navToggle.addEventListener('click', function () {
+    var open = navMenu.classList.toggle('is-open');
+    navToggle.setAttribute('aria-expanded', String(open));
+  });
+  navMenu.addEventListener('click', function (e) {
+    if (e.target.closest('a')) { closeNavMenu(); }
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && navMenu.classList.contains('is-open')) {
+      closeNavMenu();
+      navToggle.focus();
+    }
+  });
+  window.addEventListener('resize', function () {
+    if (!window.matchMedia('(max-width: 767px)').matches) { closeNavMenu(); }
+  });
 
   /* --- 問い合わせフォームの入力チェック --- */
   var form = document.getElementById('contact-form');
