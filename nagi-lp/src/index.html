@@ -159,10 +159,19 @@ main > * + * { margin-top: var(--seam); }
 /* ---------------------------------------------------------------------------
    セクション共通
    ------------------------------------------------------------------------- */
-.sec        { padding-block: var(--sec-pad); background: var(--c-base); }
+.sec        { padding-block: var(--sec-pad); background-color: var(--c-base); --tint: rgba(247, 242, 234, .92); }
 .sec--lg    { padding-block: var(--sec-pad-lg); }
-.sec--beige { background: var(--c-beige-bg); }
-.sec--key   { background: var(--c-key); color: #fff; }
+.sec--beige { background-color: var(--c-beige-bg); --tint: rgba(242, 237, 227, .92); }
+.sec--key   { background-color: var(--c-key); color: #fff; --tint: rgba(74, 54, 42, .90); }
+
+/* セクション自体の背景に木目実写を使用。テキストの可読性を保つため
+   半透明のティント（--tint、セクションごとの地色）を重ねて表示する */
+.nav, .fv, .sec, .cta-band, .foot {
+  background-image: linear-gradient(var(--tint), var(--tint)), url('../public/images/wood-bg-photo-800.webp');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
 
 /* 見出しは折り返し位置が不自然にならないよう幅を絞りすぎない。
    読み幅の制御は .body / .lead 側で行う（PART6-4） */
@@ -211,7 +220,8 @@ main > * + * { margin-top: var(--seam); }
 .nav {
   position: sticky; top: 0; z-index: 50;
   padding-block: var(--sp-16);
-  background: var(--c-base);
+  background-color: var(--c-base);
+  --tint: rgba(247, 242, 234, .92);
   border-bottom: 1px solid var(--c-line);
 }
 .nav__inner { display: flex; align-items: center; justify-content: space-between; gap: var(--sp-24); }
@@ -251,7 +261,7 @@ main > * + * { margin-top: var(--seam); }
 /* ---------------------------------------------------------------------------
    1. ファーストビュー
    ------------------------------------------------------------------------- */
-.fv { padding-block: var(--sp-64) var(--sec-pad-lg); background: var(--c-base); }
+.fv { padding-block: var(--sp-64) var(--sec-pad-lg); background-color: var(--c-base); --tint: rgba(247, 242, 234, .92); }
 .fv__grid { display: grid; grid-template-columns: 1.15fr .85fr; gap: var(--sp-64); align-items: center; }
 .fv__cta { margin-top: var(--sp-48); }
 /* 現素材の背景は純白ではなくベース地に溶け込まないため写真パネルとして扱う。
@@ -337,8 +347,8 @@ main > * + * { margin-top: var(--seam); }
 .feature__note { font-size: 14px; color: var(--c-muted); margin-top: var(--sp-4); }
 
 /* CTA帯（セクション間の節目に置く独立CTA） */
-.cta-band { padding-block: var(--sp-64); background: var(--c-beige-bg); border-block: 1px solid var(--c-sub); text-align: center; }
-.cta-band--base { background: var(--c-base); border-color: var(--c-line); }
+.cta-band { padding-block: var(--sp-64); background-color: var(--c-beige-bg); --tint: rgba(242, 237, 227, .92); border-block: 1px solid var(--c-sub); text-align: center; }
+.cta-band--base { background-color: var(--c-base); --tint: rgba(247, 242, 234, .92); border-color: var(--c-line); }
 .cta-band__sub { margin-top: var(--sp-12); font-size: 14px; color: var(--c-muted); }
 
 /* ---------------------------------------------------------------------------
@@ -453,7 +463,7 @@ main > * + * { margin-top: var(--seam); }
 /* ---------------------------------------------------------------------------
    フッター
    ------------------------------------------------------------------------- */
-.foot { padding-block: var(--sp-64); background: var(--c-key-deep); color: rgba(255,255,255,.86); font-size: 14px; }
+.foot { padding-block: var(--sp-64); background-color: var(--c-key-deep); --tint: rgba(53, 39, 30, .92); color: rgba(255,255,255,.86); font-size: 14px; }
 .foot__logo { font-size: 18px; font-weight: 700; letter-spacing: .22em; color: #fff; }
 .foot__links { list-style: none; display: flex; flex-wrap: wrap; gap: var(--sp-4) var(--sp-32); margin-top: var(--sp-16); }
 .foot__links a {
